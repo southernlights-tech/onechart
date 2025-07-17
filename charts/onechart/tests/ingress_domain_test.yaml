@@ -38,6 +38,7 @@ tests:
           path: metadata.annotations
           value:
             just/a-random: annotation
+            konghq.com/plugins: release-name-file-log
   - it: Should set ingress class
     set:
       ingress:

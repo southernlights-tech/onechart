@@ -1,6 +1,14 @@
 {{- define "common.volumesRef.tpl" }}
-{{- if or (or (or (.Values.volumes) (.Values.sealedFileSecrets)) .Values.fileSecrets) .Values.existingFileSecrets }}
+{{- if or (or (or (.Values.secrets.secretManager) (.Values.volumes) (.Values.sealedFileSecrets)) .Values.fileSecrets) .Values.existingFileSecrets }}
 volumes:
+  {{- if .Values.secrets.secretManager }}
+  - name: {{ template "common.robustName" .Release.Name }}-csi
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: {{ template "common.robustName" .Release.Name }}-csi
+  {{- end }}
   {{- range .Values.volumes }}
   - name: {{ .name }}
     {{- if .emptyDir }}

@@ -37,7 +37,6 @@ resources:
     cpu: "200m"
     memory: "200Mi"
   limits:
-    cpu: "200m"
     memory: "200Mi"
 
 nodeSelector: {}
@@ -46,7 +45,9 @@ tolerations: []
 
 probe:
   enabled: false
+  type: "http"
   path: "/"
+  command: ["uname", "-a"]
   settings:
     initialDelaySeconds: 0
     periodSeconds: 10
@@ -80,3 +81,27 @@ monitor:
 
 container: {}
 podSpec: {}
+
+secrets:
+  secretManager: {}
+
+serviceAccountCreate: {}
+
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 50
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        type: Pods
+        value: 5
+        periodSeconds: 300
+    scaleUp:
+      stabilizationWindowSeconds: 15
+      policies:
+        type: Pods
+        value: 10
+        periodSeconds: 15
+  # cpuAverageUtilization: percentage of the requested value of the resource for the pods.
+  # memoryAverageUtilization: percentage of the requested value of the resource for the pods.

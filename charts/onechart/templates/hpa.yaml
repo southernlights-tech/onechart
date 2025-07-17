@@ -1,0 +1,44 @@
+{{- if or (hasKey .Values.autoscaling "cpuAverageUtilization") (hasKey .Values.autoscaling "memoryAverageUtilization") }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "robustName".Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "robustName".Release.Name }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.autoscaling.behavior.scaleDown.stabilizationWindowSeconds }}
+      policies:
+        - type: {{ .Values.autoscaling.behavior.scaleDown.policies.type }}
+          value: {{ .Values.autoscaling.behavior.scaleDown.policies.value }}
+          periodSeconds: {{ .Values.autoscaling.behavior.scaleDown.policies.periodSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.autoscaling.behavior.scaleUp.stabilizationWindowSeconds }}
+      policies:
+        - type: {{ .Values.autoscaling.behavior.scaleUp.policies.type }}
+          value: {{ .Values.autoscaling.behavior.scaleUp.policies.value }}
+          periodSeconds: {{ .Values.autoscaling.behavior.scaleUp.policies.periodSeconds }}
+  metrics:
+{{- if hasKey .Values.autoscaling "cpuAverageUtilization" }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: AverageValue
+          averageUtilization: {{ .Values.autoscaling.cpuAverageUtilization }}
+{{- end }}
+{{- if hasKey .Values.autoscaling "memoryAverageUtilization" }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: AverageValue
+          averageUtilization: {{ .Values.autoscaling.memoryAverageUtilization }}
+{{- end }}
+{{- end }}
