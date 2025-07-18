@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   onechart:
   - apiVersion: v2
-    created: "2025-07-18T09:38:04.87893285-03:00"
+    created: "2025-07-18T11:16:53.87102311-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -13,6 +13,6 @@ entries:
     name: onechart
     type: application
     urls:
-    - southernlights-tech.github.io/onechart-0.74.0.tgz
+    - onechart-0.74.0.tgz
     version: 0.74.0
-generated: "2025-07-18T09:38:04.876497415-03:00"
+generated: "2025-07-18T11:16:53.867084176-03:00"
