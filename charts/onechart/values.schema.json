@@ -435,7 +435,6 @@
             }
           ],
           "required": [
-            "cpu",
             "memory"
           ],
           "properties": {

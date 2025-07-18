@@ -19,6 +19,14 @@ spec:
               {{- toYaml . | nindent 12 }}
             {{- end }}
         spec:
+          {{- if .Values.serviceAccountCreate }}
+          serviceAccount: {{ .Release.Name }}
+          serviceAccountName: {{ .Release.Name }}
+          {{- end }}
+          {{- if .Values.serviceAccount }}
+          serviceAccount: {{ .Values.serviceAccount }}
+          serviceAccountName: {{ .Values.serviceAccount }}
+          {{- end }}
           {{- with .Values.imagePullSecrets }}
           imagePullSecrets:
             {{- range . }}

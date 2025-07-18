@@ -24,10 +24,19 @@ ports:
   {{- end }}
 {{- if .Values.probe.enabled }}
 readinessProbe:
+  {{- if eq .Values.probe.type "http" }}
   httpGet:
     path: {{ .Values.probe.path }}
     port: {{ .Values.containerPort }}
     scheme: HTTP
+  {{- end }}
+  {{- if eq .Values.probe.type "exec" }}
+  exec:
+    command:
+    {{- range .Values.probe.command }}
+      - {{ . }}
+    {{- end }}
+  {{- end }}
   {{- with .Values.probe.settings }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
