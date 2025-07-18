@@ -1,6 +1,11 @@
 {{- define "common.volumeMountsRef.tpl" -}}
-{{- if or (or (or (.Values.volumes) (.Values.sealedFileSecrets)) .Values.fileSecrets) .Values.existingFileSecrets -}}
+{{- if or (or (or (.Values.secrets.secretManager) (.Values.volumes) (.Values.sealedFileSecrets)) .Values.fileSecrets) .Values.existingFileSecrets -}}
 volumeMounts:
+{{- if .Values.secrets.secretManager }}
+  - name: {{ template "common.robustName" .Release.Name }}-csi
+    mountPath: {{ .Values.secrets.secretManager.csi.path }}
+    readOnly: true
+{{- end }}
 {{- range .Values.volumes }}
 {{- if not (hasPrefix "init-" .name) }}
   - name: {{ .name }}

@@ -15,4 +15,4 @@ tests:
           value:
             gimlet.io/git-repository: github.com/laszlocph/demo-app
             gimlet.io/git-sha: xyz
-
+            konghq.com/plugins: release-name-file-log

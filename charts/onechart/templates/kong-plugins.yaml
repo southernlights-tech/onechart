@@ -1,0 +1,13 @@
+{{ if .Values.ingress }}
+{{- $robustName := include "robustName" .Release.Name -}}
+{{- $resourceName := $robustName -}}
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: {{ $resourceName }}-file-log
+  namespace: {{ .Release.Namespace }}
+config:
+  path: /dev/stdout
+  reopen: false
+plugin: file-log
+{{- end }}

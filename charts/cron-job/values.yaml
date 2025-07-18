@@ -34,3 +34,21 @@ constraints:
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 120
+
+secrets:
+  secretManager: {}
+    # name: secret-name-changeme
+    # keys:
+    #   - SECRET_KEY_CHANGE_ME
+    # csi:
+    #   name: secrets-store
+    #   path: /mnt/secrets-store
+
+
+serviceAccountCreate: {}
+#   annotations:
+#     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/change-me
+
+# use this one if the service account already exists
+# serviceAccount: changeme
+
