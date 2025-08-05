@@ -11,3 +11,38 @@ config:
   reopen: false
 plugin: file-log
 {{- end }}
+
+{{- if and .Values.ingress .Values.kong.plugins }}
+{{- $robustName := include "robustName" .Release.Name -}}
+{{- $resourceName := $robustName -}}
+{{- range $pluginName, $pluginConfig := .Values.kong.plugins }}
+{{- if $pluginConfig.enabled }}
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: {{ $resourceName }}-{{ $pluginName }}
+  namespace: {{ $.Release.Namespace }}
+  {{- if $pluginConfig.labels }}
+  labels:
+    {{- toYaml $pluginConfig.labels | nindent 4 }}
+  {{- end }}
+  {{- if $pluginConfig.annotations }}
+  annotations:
+    {{- toYaml $pluginConfig.annotations | nindent 4 }}
+  {{- end }}
+{{- if $pluginConfig.config }}
+config:
+  {{- toYaml $pluginConfig.config | nindent 2 }}
+{{- end }}
+plugin: {{ $pluginConfig.plugin }}
+{{- if $pluginConfig.protocols }}
+protocols:
+  {{- toYaml $pluginConfig.protocols | nindent 2 }}
+{{- end }}
+{{- if $pluginConfig.disabled }}
+disabled: {{ $pluginConfig.disabled }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

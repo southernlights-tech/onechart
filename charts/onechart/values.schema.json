@@ -1156,6 +1156,78 @@
           }
         ]
       }
+    },
+    "kong": {
+      "type": "object",
+      "title": "Kong Configuration",
+      "description": "Configuration for Kong plugins and settings",
+      "properties": {
+        "plugins": {
+          "type": "object",
+          "title": "Kong Plugins",
+          "description": "Custom Kong plugins configuration",
+          "patternProperties": {
+            "^[a-zA-Z0-9-_]+$": {
+              "type": "object",
+              "title": "Kong Plugin",
+              "description": "Configuration for a Kong plugin",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "title": "Enable Plugin",
+                  "description": "Enable this Kong plugin",
+                  "default": false
+                },
+                "plugin": {
+                  "type": "string",
+                  "title": "Plugin Type",
+                  "description": "The Kong plugin type (e.g., rate-limiting, response-transformer, etc.)",
+                  "examples": ["rate-limiting", "response-transformer", "request-transformer", "cors", "jwt", "oauth2"]
+                },
+                "config": {
+                  "type": "object",
+                  "title": "Plugin Configuration",
+                  "description": "Plugin-specific configuration object",
+                  "additionalProperties": true
+                },
+                "protocols": {
+                  "type": "array",
+                  "title": "Protocols",
+                  "description": "List of protocols this plugin applies to",
+                  "items": {
+                    "type": "string",
+                    "enum": ["http", "https", "grpc", "grpcs", "tcp", "tls"]
+                  }
+                },
+                "disabled": {
+                  "type": "boolean",
+                  "title": "Disabled",
+                  "description": "Whether the plugin is disabled",
+                  "default": false
+                },
+                "labels": {
+                  "type": "object",
+                  "title": "Labels",
+                  "description": "Additional labels for the plugin resource",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "annotations": {
+                  "type": "object",
+                  "title": "Annotations",
+                  "description": "Additional annotations for the plugin resource",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["enabled", "plugin"]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
     }
   },
   "additionalProperties": true
