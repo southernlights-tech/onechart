@@ -20,7 +20,7 @@ package:
 	helm dependency update charts/onechart
 	helm package charts/onechart
 	mv onechart*.tgz docs
-	# helm repo index docs --url https://chart.onechart.dev
+	helm repo index docs
 
 debug:
 	helm dependency update charts/onechart
