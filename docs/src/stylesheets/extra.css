@@ -1,0 +1,166 @@
+/* Custom styles to match original OneChart design */
+
+:root {
+  --md-primary-fg-color: #667eea;
+  --md-primary-fg-color--light: #764ba2;
+  --md-primary-fg-color--dark: #667eea;
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-highlight: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+}
+
+/* Header gradient */
+.md-header {
+  background: var(--gradient-primary) !important;
+}
+
+/* Hero section styling */
+.hero {
+  background: var(--gradient-primary);
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Card grid layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.card h4 {
+  color: var(--md-primary-fg-color);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* Highlight boxes */
+.highlight {
+  background: var(--gradient-highlight);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border-left: 4px solid var(--md-primary-fg-color);
+}
+
+/* Install command styling */
+.install-command {
+  background: #2d3748;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+/* Plugin example boxes */
+.plugin-example {
+  background: #f8f9fa;
+  border-left: 4px solid var(--md-primary-fg-color);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.plugin-example h5 {
+  color: var(--md-primary-fg-color);
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+/* Badge styling */
+.badge {
+  display: inline-block;
+  background: var(--md-primary-fg-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin: 0.25rem;
+}
+
+/* Warning and info boxes */
+.warning {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+.info {
+  background: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+/* Table styling */
+.md-typeset table:not([class]) {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.md-typeset table:not([class]) th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+/* Code block improvements */
+.md-typeset .highlight {
+  margin: 1rem 0;
+}
+
+/* Navigation improvements */
+.md-nav__title {
+  font-weight: 600;
+}
+
+/* Footer styling */
+.md-footer {
+  background: #2d3748;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

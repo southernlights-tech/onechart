@@ -1,6 +1,6 @@
-.PHONY: all lint kubeval test package debug
+.PHONY: all lint kubeval test package debug docs docs-serve
 
-all: lint kubeval test package
+all: lint kubeval test package docs
 
 lint:
 	helm lint charts/onechart/
@@ -25,3 +25,20 @@ package:
 debug:
 	helm dependency update charts/onechart
 	helm template my-release charts/onechart/ -f values.yaml --debug
+
+docs:
+	@echo "Setting up documentation environment..."
+	test -d .docs-venv || python3 -m venv .docs-venv
+	@echo "Installing dependencies..."
+	.docs-venv/bin/pip install -r docs/requirements.txt
+	@echo "Building documentation..."
+	nix-shell --run "source .docs-venv/bin/activate && cd docs && mkdocs build --clean"
+	@echo "Documentation built successfully!"
+
+docs-serve:
+	@echo "Setting up documentation environment..."
+	test -d .docs-venv || python3 -m venv .docs-venv
+	@echo "Installing dependencies..."
+	.docs-venv/bin/pip install -r docs/requirements.txt
+	@echo "Starting documentation server..."
+	nix-shell --run "source .docs-venv/bin/activate && cd docs && mkdocs serve"
