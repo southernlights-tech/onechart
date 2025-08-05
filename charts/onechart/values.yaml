@@ -105,3 +105,37 @@ autoscaling:
         periodSeconds: 15
   # cpuAverageUtilization: percentage of the requested value of the resource for the pods.
   # memoryAverageUtilization: percentage of the requested value of the resource for the pods.
+
+# Kong plugin configurations
+kong:
+  plugins:
+    # Example CORS plugin using response-transformer
+    # cors:
+    #   enabled: false
+    #   plugin: response-transformer
+    #   config:
+    #     append:
+    #       headers:
+    #         - "access-control-allow-origin:https://example.com"
+    #         - "access-control-allow-credentials:true"
+    
+    # Example rate limiting plugin
+    # rate-limit:
+    #   enabled: false
+    #   plugin: rate-limiting
+    #   config:
+    #     minute: 100
+    #     hour: 1000
+    #     policy: local
+    
+    # Example request transformer plugin
+    # request-transformer:
+    #   enabled: false
+    #   plugin: request-transformer
+    #   config:
+    #     add:
+    #       headers:
+    #         - "X-Custom-Header:custom-value"
+    #     remove:
+    #       headers:
+    #         - "X-Remove-Header"
