@@ -158,6 +158,59 @@
         1
       ]
     },
+    "strategy": {
+      "$id": "#/properties/strategy",
+      "oneOf": [
+        {
+          "type": "string",
+          "title": "Strategy Type (Simple)",
+          "description": "Deployment strategy type as a string",
+          "enum": ["RollingUpdate", "Recreate"],
+          "default": "RollingUpdate"
+        },
+        {
+          "type": "object",
+          "title": "Strategy Configuration",
+          "description": "Deployment strategy configuration object",
+          "default": {},
+          "properties": {
+            "type": {
+              "type": "string",
+              "title": "Strategy Type",
+              "description": "Type of deployment strategy",
+              "enum": ["RollingUpdate", "Recreate"],
+              "default": "RollingUpdate"
+            },
+            "rollingUpdate": {
+              "type": "object",
+              "title": "Rolling Update Parameters",
+              "description": "Parameters for rolling update strategy",
+              "default": {},
+              "properties": {
+                "maxSurge": {
+                  "oneOf": [
+                    {"type": "string"},
+                    {"type": "integer"}
+                  ],
+                  "title": "Max Surge",
+                  "description": "Maximum number of pods that can be scheduled above desired number",
+                  "default": "25%"
+                },
+                "maxUnavailable": {
+                  "oneOf": [
+                    {"type": "string"},
+                    {"type": "integer"}
+                  ],
+                  "title": "Max Unavailable",
+                  "description": "Maximum number of pods that can be unavailable during update",
+                  "default": 0
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "podDisruptionBudgetEnabled": {
       "$id": "#/properties/podDisruptionBudgetEnabled",
       "type": "boolean",

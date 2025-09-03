@@ -16,19 +16,32 @@ metadata:
     v1alpha1.opensca.dev/version.branch: {{ .Values.gitBranch }}
     {{- end }}
 spec:
-  replicas: {{ .Values.replicas }}
+  {{- if not (or (hasKey .Values.autoscaling "cpuAverageUtilization") (hasKey .Values.autoscaling "memoryAverageUtilization")) }}
+  replicas: {{ .Values.replicas | default 1 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "helm-chart.selectorLabels" . | nindent 6 }}
-  {{- $singleReplica := eq (.Values.replicas | int64) 1 }}
-  {{- $strategyNotDefined := not .Values.strategy }}
-  {{- if and (and .Values.volumes $singleReplica) $strategyNotDefined}}
   strategy:
-    type: Recreate
-  {{- end }}
-  {{- if .Values.strategy }}
-  strategy:
+    {{- if kindIs "string" .Values.strategy }}
     type: {{ .Values.strategy }}
+    {{- else }}
+    type: {{ .Values.strategy.type | default "RollingUpdate" }}
+    {{- if eq (.Values.strategy.type | default "RollingUpdate") "RollingUpdate" }}
+    {{- if hasKey .Values.strategy "rollingUpdate" }}
+    rollingUpdate:
+      {{- with .Values.strategy.rollingUpdate.maxSurge }}
+      maxSurge: {{ . }}
+      {{- end }}
+      {{- if hasKey .Values.strategy.rollingUpdate "maxUnavailable" }}
+      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
+      {{- end }}
+    {{- else }}
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+    {{- end }}
+    {{- end }}
   {{- end }}
   template:
     metadata:

@@ -35,7 +35,7 @@ tests:
             - name: data
               persistentVolumeClaim:
                 claimName: RELEASE-NAME-data
-  - it: Should recreate to avoid stuck deployments
+  - it: Should use default zero-downtime strategy even with volumes
     set:
       volumes:
         - name: data
@@ -47,7 +47,17 @@ tests:
         documentIndex: 0
         equal:
           path: spec.strategy.type
-          value: Recreate
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 25%
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxUnavailable
+          value: 0
   - it: Should strategy take precedence
     set:
       volumes:
@@ -64,13 +74,13 @@ tests:
           value: RollingUpdate
   - it: Should strategy be set
     set:
-      strategy: Dummy
+      strategy: Recreate
     asserts:
       - template: deployment.yaml
         documentIndex: 0
         equal:
           path: spec.strategy.type
-          value: Dummy
+          value: Recreate
   - it: Should use the existing claim
     set:
       volumes:
