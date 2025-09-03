@@ -1,0 +1,240 @@
+suite: test deployment strategy configuration
+templates:
+  - deployment.yaml
+  - configmap.yaml
+tests:
+  - it: Should use default RollingUpdate strategy with zero-downtime settings
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 25%
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxUnavailable
+          value: 0
+
+  - it: Should support legacy string strategy configuration
+    set:
+      strategy: Recreate
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: Recreate
+      - template: deployment.yaml
+        documentIndex: 0
+        isNull:
+          path: spec.strategy.rollingUpdate
+
+  - it: Should support object strategy configuration with custom values
+    set:
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 2
+          maxUnavailable: 1
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 2
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxUnavailable
+          value: 1
+
+  - it: Should support object strategy configuration with percentage values
+    set:
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 50%
+          maxUnavailable: 25%
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 50%
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxUnavailable
+          value: 25%
+
+  - it: Should support object strategy with Recreate type
+    set:
+      strategy:
+        type: Recreate
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: Recreate
+      - template: deployment.yaml
+        documentIndex: 0
+        isNull:
+          path: spec.strategy.rollingUpdate
+
+  - it: Should default to RollingUpdate when only rollingUpdate config is provided
+    set:
+      strategy:
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 0
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 1
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxUnavailable
+          value: 0
+
+  - it: Should override default strategy when volumes are present but replicas > 1
+    set:
+      replicas: 3
+      volumes:
+        - name: data
+          path: /var/lib/data
+          size: 10Gi
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 0
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 1
+
+  - it: Should use zero-downtime strategy by default even with single replica and volumes
+    set:
+      replicas: 1
+      volumes:
+        - name: data
+          path: /var/lib/data
+          size: 10Gi
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 25%
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxUnavailable
+          value: 0
+
+  - it: Should allow override of single replica + volumes default to use RollingUpdate
+    set:
+      replicas: 1
+      volumes:
+        - name: data
+          path: /var/lib/data
+          size: 10Gi
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 0
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 1
+
+  - it: Should handle partial rollingUpdate configuration (only maxSurge)
+    set:
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 3
+          maxUnavailable: null
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxSurge
+          value: 3
+      - template: deployment.yaml
+        documentIndex: 0
+        isNull:
+          path: spec.strategy.rollingUpdate.maxUnavailable
+
+  - it: Should handle partial rollingUpdate configuration (only maxUnavailable)
+    set:
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: null
+          maxUnavailable: 2
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.type
+          value: RollingUpdate
+      - template: deployment.yaml
+        documentIndex: 0
+        isNull:
+          path: spec.strategy.rollingUpdate.maxSurge
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.strategy.rollingUpdate.maxUnavailable
+          value: 2

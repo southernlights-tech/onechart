@@ -18,6 +18,14 @@ image:
 
 replicas: 1
 
+# Default strategy provides zero-downtime deployments
+# Note: Single replica deployments with volumes will still use Recreate strategy
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 0
+
 nameOverride: ""
 fullnameOverride: ""
 
