@@ -831,6 +831,70 @@
       "properties": {},
       "additionalProperties": true
     },
+    "secrets": {
+      "$id": "#/properties/secrets",
+      "type": "object",
+      "title": "Secrets configuration",
+      "description": "Configuration for various secret management options",
+      "default": {},
+      "properties": {
+        "secretManager": {
+          "$id": "#/properties/secrets/properties/secretManager",
+          "type": "object",
+          "title": "AWS Secrets Manager",
+          "description": "Configuration for AWS Secrets Manager integration",
+          "default": {},
+          "properties": {
+            "name": {
+              "$id": "#/properties/secrets/properties/secretManager/properties/name",
+              "type": "string",
+              "title": "Secret Name",
+              "description": "The name of the secret in AWS Secrets Manager",
+              "default": ""
+            },
+            "keys": {
+              "$id": "#/properties/secrets/properties/secretManager/properties/keys",
+              "type": "array",
+              "title": "Secret Keys",
+              "description": "Array of secret keys to retrieve from AWS Secrets Manager",
+              "default": [],
+              "items": {
+                "type": "string"
+              }
+            },
+            "keyMappings": {
+              "$id": "#/properties/secrets/properties/secretManager/properties/keyMappings",
+              "type": "object",
+              "title": "Key Mappings",
+              "description": "Optional mapping of secret keys to different environment variable names",
+              "default": {},
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "csi": {
+              "$id": "#/properties/secrets/properties/secretManager/properties/csi",
+              "type": "object",
+              "title": "CSI Configuration",
+              "description": "Configuration for Secrets Store CSI driver",
+              "default": {},
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "CSI Volume Name",
+                  "default": "secrets-store"
+                },
+                "path": {
+                  "type": "string",
+                  "title": "Mount Path",
+                  "default": "/mnt/secrets-store"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "ingress": {
       "$id": "#/properties/ingress",
       "type": "object",

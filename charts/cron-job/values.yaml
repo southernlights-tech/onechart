@@ -35,14 +35,28 @@ constraints:
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 120
 
+# Run job immediately upon deployment/upgrade
+runJobOnDeploy:
+  enabled: false              # Default: disabled for backward compatibility
+  deleteOnSuccess: true       # Delete job after successful completion
+  backoffLimit: 5            # Number of retry attempts on failure
+  activeDeadlineSeconds: 1800 # Job timeout in seconds (30 minutes)
+
 secrets:
   secretManager: {}
-    # name: secret-name-changeme
+  # Example configuration for AWS Secrets Manager:
+  # secretManager:
+  #   name: "my-secret-name"
     # keys:
-    #   - SECRET_KEY_CHANGE_ME
+  #     - "SECRET_KEY_1"
+  #     - "SECRET_KEY_2"
+  #   # Optional: Remap secret keys to different environment variable names
+  #   keyMappings:
+  #     SECRET_KEY_1: "ENV_VAR_1"   # Maps SECRET_KEY_1 -> ENV_VAR_1
+  #     SECRET_KEY_2: "ENV_VAR_2"   # Maps SECRET_KEY_2 -> ENV_VAR_2
     # csi:
-    #   name: secrets-store
-    #   path: /mnt/secrets-store
+  #     name: "secrets-store"
+  #     path: "/mnt/secrets-store"
 
 
 serviceAccountCreate: {}

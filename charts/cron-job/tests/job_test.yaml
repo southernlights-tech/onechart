@@ -1,0 +1,102 @@
+suite: test deployment job
+templates:
+  - job.yaml
+tests:
+  - it: Should not create job when runJobOnDeploy.enabled is false
+    set:
+      runJobOnDeploy:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: Should not create job when runJobOnDeploy is not set
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: Should create job when runJobOnDeploy.enabled is true
+    set:
+      runJobOnDeploy:
+        enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Job
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-deploy-job-0
+
+  - it: Should use Helm hooks with correct annotations
+    set:
+      runJobOnDeploy:
+        enabled: true
+    asserts:
+      - equal:
+          path: metadata.annotations["helm.sh/hook"]
+          value: "post-install,post-upgrade"
+      - equal:
+          path: metadata.annotations["helm.sh/hook-weight"]
+          value: "1"
+
+  - it: Should set delete policy when deleteOnSuccess is true
+    set:
+      runJobOnDeploy:
+        enabled: true
+        deleteOnSuccess: true
+    asserts:
+      - equal:
+          path: metadata.annotations["helm.sh/hook-delete-policy"]
+          value: "before-hook-creation,hook-succeeded"
+
+  - it: Should set delete policy when deleteOnSuccess is false
+    set:
+      runJobOnDeploy:
+        enabled: true
+        deleteOnSuccess: false
+    asserts:
+      - equal:
+          path: metadata.annotations["helm.sh/hook-delete-policy"]
+          value: "before-hook-creation"
+
+  - it: Should configure backoffLimit and activeDeadlineSeconds
+    set:
+      runJobOnDeploy:
+        enabled: true
+        backoffLimit: 10
+        activeDeadlineSeconds: 3600
+    asserts:
+      - equal:
+          path: spec.backoffLimit
+          value: 10
+      - equal:
+          path: spec.activeDeadlineSeconds
+          value: 3600
+
+  - it: Should use same image and command as cronJob
+    set:
+      runJobOnDeploy:
+        enabled: true
+      image:
+        repository: "my-app"
+        tag: "v1.2.3"
+      command: "echo 'test job'"
+      overrideCommand: true
+      shell: "/bin/bash"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "my-app:v1.2.3"
+      - equal:
+          path: spec.template.spec.containers[0].command
+          value: ["/bin/bash", "-c", "echo 'test job'"]
+
+  - it: Should set restartPolicy to Never
+    set:
+      runJobOnDeploy:
+        enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.restartPolicy
+          value: Never

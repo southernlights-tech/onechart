@@ -24,7 +24,7 @@ ports:
   {{- end }}
 {{- if .Values.probe.enabled }}
 readinessProbe:
-  {{- if eq .Values.probe.type "http" }}
+  {{- if or (eq .Values.probe.type "http") (and (not .Values.probe.type) .Values.probe.path) }}
   httpGet:
     path: {{ .Values.probe.path }}
     port: {{ .Values.containerPort }}
@@ -43,10 +43,19 @@ readinessProbe:
 {{- end }}
 {{- if .Values.livenessProbe.enabled }}
 livenessProbe:
+  {{- if or (eq .Values.livenessProbe.type "http") (and (not .Values.livenessProbe.type) .Values.livenessProbe.path) }}
   httpGet:
     path: {{ .Values.livenessProbe.path }}
     port: {{ .Values.containerPort }}
     scheme: HTTP
+  {{- end }}
+  {{- if eq .Values.livenessProbe.type "exec" }}
+  exec:
+    command:
+    {{- range .Values.livenessProbe.command }}
+      - {{ . }}
+    {{- end }}
+  {{- end }}
   {{- with .Values.livenessProbe.settings }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
