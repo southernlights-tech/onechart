@@ -92,6 +92,19 @@ podSpec: {}
 
 secrets:
   secretManager: {}
+  # Example configuration for AWS Secrets Manager:
+  # secretManager:
+  #   name: "my-secret-name"
+  #   keys:
+  #     - "SECRET_KEY_1"
+  #     - "SECRET_KEY_2"
+  #   # Optional: Remap secret keys to different environment variable names
+  #   keyMappings:
+  #     SECRET_KEY_1: "ENV_VAR_1"   # Maps SECRET_KEY_1 -> ENV_VAR_1
+  #     SECRET_KEY_2: "ENV_VAR_2"   # Maps SECRET_KEY_2 -> ENV_VAR_2
+  #   csi:
+  #     name: "secrets-store"
+  #     path: "/mnt/secrets-store"
 
 serviceAccountCreate: {}
 

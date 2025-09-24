@@ -17,7 +17,7 @@ metadata:
     {{- end }}
 spec:
   {{- if not (or (hasKey .Values.autoscaling "cpuAverageUtilization") (hasKey .Values.autoscaling "memoryAverageUtilization")) }}
-  replicas: {{ .Values.replicas | default 1 }}
+  replicas: {{ if (hasKey .Values "replicas") }}{{ .Values.replicas }}{{ else }}1{{ end }}
   {{- end }}
   selector:
     matchLabels:
