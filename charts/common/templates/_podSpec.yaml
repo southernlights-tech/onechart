@@ -53,6 +53,10 @@ containers:
     {{- end }}
     {{- include "common.envFromRef.tpl" . | nindent 4 }}
     {{- include "common.volumeMountsRef.tpl" . | nindent 4 }}
+    {{- if .Values.sidecar.resources }}
+    resources:
+      {{- toYaml .Values.sidecar.resources | nindent 6 }}
+    {{- end }}
   {{- end }}
 {{- include "common.volumesRef.tpl" . }}
 {{- with .Values.nodeSelector }}
@@ -79,5 +83,15 @@ affinity:
 {{- with .Values.tolerations }}
 tolerations:
   {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.dnsPolicy }}
+dnsPolicy: {{ . }}
+{{- end }}
+{{- with .Values.dnsConfig }}
+dnsConfig:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.terminationGracePeriodSeconds }}
+terminationGracePeriodSeconds: {{ . }}
 {{- end }}
 {{- end }}
