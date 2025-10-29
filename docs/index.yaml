@@ -2,7 +2,21 @@ apiVersion: v1
 entries:
   cron-job:
   - apiVersion: v2
-    created: "2025-09-24T16:40:05.327604266-03:00"
+    created: "2025-10-28T10:14:33.152977012-03:00"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: 0.8.2
+    description: One chart to rule them all. A generic Helm chart for your application
+      deployments. Because no-one can remember the Kubernetes yaml syntax.
+    digest: d73279f8955f3336f2fc905d4e250266cffae9bb01b2b18b724f822e59b9871f
+    name: cron-job
+    type: application
+    urls:
+    - cron-job-0.73.7.tgz
+    version: 0.73.7
+  - apiVersion: v2
+    created: "2025-10-28T10:14:33.151770748-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -17,7 +31,21 @@ entries:
     version: 0.73.3
   onechart:
   - apiVersion: v2
-    created: "2025-09-24T16:40:05.333442471-03:00"
+    created: "2025-10-28T10:14:33.168089087-03:00"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: 0.8.2
+    description: One chart to rule them all. A generic Helm chart for your application
+      deployments. Because no-one can remember the Kubernetes yaml syntax.
+    digest: 22cb5a105e223d34bc5959f3afe3a7ea235f980a939ce9f5213ab3cf84981e18
+    name: onechart
+    type: application
+    urls:
+    - onechart-0.75.3.tgz
+    version: 0.75.3
+  - apiVersion: v2
+    created: "2025-10-28T10:14:33.165999095-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -31,7 +59,7 @@ entries:
     - onechart-0.74.5.tgz
     version: 0.74.5
   - apiVersion: v2
-    created: "2025-09-24T16:40:05.33255199-03:00"
+    created: "2025-10-28T10:14:33.162777012-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -45,7 +73,7 @@ entries:
     - onechart-0.74.3.tgz
     version: 0.74.3
   - apiVersion: v2
-    created: "2025-09-24T16:40:05.33167387-03:00"
+    created: "2025-10-28T10:14:33.160597829-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -59,7 +87,7 @@ entries:
     - onechart-0.74.2.tgz
     version: 0.74.2
   - apiVersion: v2
-    created: "2025-09-24T16:40:05.330722417-03:00"
+    created: "2025-10-28T10:14:33.158516148-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -73,7 +101,7 @@ entries:
     - onechart-0.74.1-rc2.tgz
     version: 0.74.1-rc2
   - apiVersion: v2
-    created: "2025-09-24T16:40:05.329751548-03:00"
+    created: "2025-10-28T10:14:33.156403178-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -87,7 +115,7 @@ entries:
     - onechart-0.74.1-rc1.tgz
     version: 0.74.1-rc1
   - apiVersion: v2
-    created: "2025-09-24T16:40:05.328649516-03:00"
+    created: "2025-10-28T10:14:33.154694809-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -100,4 +128,4 @@ entries:
     urls:
     - onechart-0.74.0.tgz
     version: 0.74.0
-generated: "2025-09-24T16:40:05.326615936-03:00"
+generated: "2025-10-28T10:14:33.150197806-03:00"

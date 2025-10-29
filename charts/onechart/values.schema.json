@@ -1017,6 +1017,70 @@
         ]
       }
     },
+    "stickySessions": {
+      "$id": "#/properties/stickySessions",
+      "type": "boolean",
+      "title": "Sticky Sessions (Deprecated)",
+      "description": "Legacy boolean flag for session affinity. Use sessionAffinity instead.",
+      "default": false
+    },
+    "sessionAffinity": {
+      "$id": "#/properties/sessionAffinity",
+      "type": "object",
+      "title": "Session Affinity Configuration",
+      "description": "Configure service session affinity for sticky sessions",
+      "default": {},
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Session Affinity",
+          "description": "Enable session affinity for the service",
+          "default": false
+        },
+        "type": {
+          "type": "string",
+          "title": "Session Affinity Type",
+          "description": "Type of session affinity",
+          "enum": ["ClientIP", "None"],
+          "default": "ClientIP"
+        },
+        "config": {
+          "type": "object",
+          "title": "Session Affinity Configuration",
+          "properties": {
+            "clientIP": {
+              "type": "object",
+              "properties": {
+                "timeoutSeconds": {
+                  "type": "integer",
+                  "title": "Timeout Seconds",
+                  "description": "Session timeout in seconds",
+                  "default": 10800,
+                  "minimum": 1,
+                  "maximum": 86400
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "service": {
+      "$id": "#/properties/service",
+      "type": "object",
+      "title": "Service Configuration",
+      "description": "Additional service configuration options",
+      "default": {},
+      "properties": {
+        "externalTrafficPolicy": {
+          "type": "string",
+          "title": "External Traffic Policy",
+          "description": "External traffic policy for LoadBalancer and NodePort services",
+          "enum": ["Local", "Cluster"],
+          "default": "Cluster"
+        }
+      }
+    },
     "volumes": {
       "$id": "#/properties/volumes",
       "type": "array",

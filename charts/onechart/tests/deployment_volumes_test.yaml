@@ -289,3 +289,28 @@ tests:
           value:
           - name: shared-volume
             mountPath: /data      
+  - it: Should not create PVC when using existing secret
+    set:
+      volumes:
+        - existingSecret: my-secret
+          name: secret-volume
+          path: /etc/secrets
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: secret-volume
+              secret:
+                secretName: my-secret
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts
+          value:
+            - name: secret-volume
+              mountPath: /etc/secrets
+      - template: pvc.yaml
+        hasDocuments:
+          count: 0
