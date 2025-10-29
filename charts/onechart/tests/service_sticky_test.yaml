@@ -1,11 +1,106 @@
-suite: test deployment
+suite: test service session affinity
 templates:
   - service.yaml
 tests:
-  - it: Should set NodePort if flag enabled
+  - it: Should set session affinity with legacy stickySessions flag on ClusterIP
     set:
       stickySessions: true
     asserts:
       - equal:
+          path: spec.sessionAffinity
+          value: ClientIP
+      - equal:
+          path: spec.sessionAffinityConfig.clientIP.timeoutSeconds
+          value: 10800
+      - isNull:
+          path: spec.externalTrafficPolicy
+
+  - it: Should set session affinity and externalTrafficPolicy with stickySessions on LoadBalancer
+    set:
+      stickySessions: true
+      loadbalancerEnabled: true
+    asserts:
+      - equal:
+          path: spec.sessionAffinity
+          value: ClientIP
+      - equal:
+          path: spec.sessionAffinityConfig.clientIP.timeoutSeconds
+          value: 10800
+      - equal:
           path: spec.externalTrafficPolicy
           value: Local
+
+  - it: Should set session affinity and externalTrafficPolicy with stickySessions on NodePort
+    set:
+      stickySessions: true
+      nodePortEnabled: true
+    asserts:
+      - equal:
+          path: spec.sessionAffinity
+          value: ClientIP
+      - equal:
+          path: spec.sessionAffinityConfig.clientIP.timeoutSeconds
+          value: 10800
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: Should set session affinity with new configuration
+    set:
+      sessionAffinity:
+        enabled: true
+        type: "ClientIP"
+        config:
+          clientIP:
+            timeoutSeconds: 7200
+    asserts:
+      - equal:
+          path: spec.sessionAffinity
+          value: ClientIP
+      - equal:
+          path: spec.sessionAffinityConfig.clientIP.timeoutSeconds
+          value: 7200
+      - isNull:
+          path: spec.externalTrafficPolicy
+
+  - it: Should set None session affinity
+    set:
+      sessionAffinity:
+        enabled: true
+        type: "None"
+    asserts:
+      - equal:
+          path: spec.sessionAffinity
+          value: None
+      - isNull:
+          path: spec.sessionAffinityConfig
+
+  - it: Should support external traffic policy with new config on LoadBalancer
+    set:
+      sessionAffinity:
+        enabled: true
+        type: "ClientIP"
+      loadbalancerEnabled: true
+      service:
+        externalTrafficPolicy: "Local"
+    asserts:
+      - equal:
+          path: spec.sessionAffinity
+          value: ClientIP
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: Should not set external traffic policy with new config on ClusterIP
+    set:
+      sessionAffinity:
+        enabled: true
+        type: "ClientIP"
+      service:
+        externalTrafficPolicy: "Local"
+    asserts:
+      - equal:
+          path: spec.sessionAffinity
+          value: ClientIP
+      - isNull:
+          path: spec.externalTrafficPolicy

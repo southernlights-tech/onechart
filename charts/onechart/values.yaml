@@ -83,6 +83,21 @@ spreadAcrossNodes: false
 
 nodePortEnabled: false
 
+# Sticky sessions support (with default settings)
+# stickySessions: false
+
+# Session affinity configuration for advanced sticky sessions
+# sessionAffinity:
+#   enabled: true
+#   type: "ClientIP"  # or "None"
+#   config:
+#     clientIP:
+#       timeoutSeconds: 10800  # 3 hours in seconds
+
+# Additional service configuration
+# service:
+#   externalTrafficPolicy: "Local"  # or "Cluster"
+
 # Set true to enable service monitor.
 monitor:
   enabled: false
