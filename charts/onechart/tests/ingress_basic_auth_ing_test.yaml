@@ -4,6 +4,8 @@ templates:
 tests:
   - it: Should set nginx specific annotations
     set:
+      kong:
+        enabled: true
       ingress:
         host: chart-example.local
         nginxBasicAuth:
