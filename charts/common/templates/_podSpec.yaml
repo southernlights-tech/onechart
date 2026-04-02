@@ -37,7 +37,7 @@ initContainers:
 containers:
   {{- $containerTpl := include "common.container.tpl" . | fromYaml }}
   {{- $container := mergeOverwrite $containerTpl .Values.container }}
-  - {{ toYaml $container | nindent 4 }}
+  - {{- toYaml $container | nindent 4 }}
     {{- include "common.envFromRef.tpl" . | nindent 4 }}
     {{- include "common.volumeMountsRef.tpl" . | nindent 4 }}
   {{- if .Values.sidecar }}
