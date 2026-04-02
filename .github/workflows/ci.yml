@@ -10,7 +10,7 @@ jobs:
         uses: azure/setup-helm@v4
       - name: Install Helm plugins
         run: |
-          helm plugin install https://github.com/helm-unittest/helm-unittest
+          helm plugin install https://github.com/helm-unittest/helm-unittest --version v0.7.1 --verify=false
       - name: Lint and Test
         run: |
           make lint
