@@ -1,4 +1,4 @@
-{{- define "common.container" -}}
+{{- define "common.container.tpl" -}}
 - name: {{ .Values.name | default .Release.Name }}
   image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
   imagePullPolicy: {{ .Values.image.pullPolicy }}
