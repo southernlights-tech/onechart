@@ -2,7 +2,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "robustName".Release.Name }}
+  name: {{ template "robustName" .Release.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
   minReplicas: {{ .Values.autoscaling.minReplicas }}
@@ -10,7 +10,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "robustName".Release.Name }}
+    name: {{ template "robustName" .Release.Name }}
   behavior:
     scaleDown:
       stabilizationWindowSeconds: {{ .Values.autoscaling.behavior.scaleDown.stabilizationWindowSeconds }}
@@ -30,7 +30,7 @@ spec:
       resource:
         name: cpu
         target:
-          type: AverageValue
+          type: Utilization
           averageUtilization: {{ .Values.autoscaling.cpuAverageUtilization }}
 {{- end }}
 {{- if hasKey .Values.autoscaling "memoryAverageUtilization" }}
@@ -38,7 +38,7 @@ spec:
       resource:
         name: memory
         target:
-          type: AverageValue
+          type: Utilization
           averageUtilization: {{ .Values.autoscaling.memoryAverageUtilization }}
 {{- end }}
 {{- end }}

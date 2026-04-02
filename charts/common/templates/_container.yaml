@@ -6,7 +6,7 @@ imagePullPolicy: {{ .Values.image.pullPolicy }}
 command:
   - {{ .Values.shell | default "/bin/sh" }}
   - "-c"
-  - {{ .Values.command }}
+  - {{ .Values.command | quote }}
 {{- end }}
 {{- with .Values.args }}
 args:

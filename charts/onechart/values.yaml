@@ -144,6 +144,7 @@ autoscaling:
 
 # Kong plugin configurations
 kong:
+  enabled: false
   plugins: {}
     # Example CORS plugin using response-transformer
     # cors:
