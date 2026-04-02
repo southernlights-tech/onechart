@@ -2,9 +2,11 @@
 name: {{ .Values.name | default .Release.Name }}
 image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
 imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{- with .Values.command }}
+{{- if .Values.command }}
 command:
-  {{- toYaml . | nindent 2 }}
+  - {{ .Values.shell | default "/bin/sh" }}
+  - "-c"
+  - {{ .Values.command }}
 {{- end }}
 {{- with .Values.args }}
 args:
@@ -19,6 +21,9 @@ envFrom:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 ports:
+{{- if .Values.ports }}
+{{- toYaml .Values.ports | nindent 0 }}
+{{- else }}
 {{- range .Values.extraPorts }}
 - name: {{ .name }}
   containerPort: {{ .containerPort }}
@@ -28,6 +33,7 @@ ports:
 - name: {{ .Values.portName | default "http" }}
   containerPort: {{ .Values.containerPort }}
   protocol: TCP
+{{- end }}
 {{- end }}
 {{- if .Values.probe.enabled }}
 readinessProbe:
