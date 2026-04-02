@@ -44,7 +44,7 @@
         - {{ . }}
       {{- end }}
     {{- end }}
-    {{- if eq .Values.probe.type "tcp" }}
+    {{- if or (eq .Values.probe.type "tcp") (eq .Values.probe.type "tcpSocket") }}
     tcpSocket:
       port: {{ .Values.containerPort }}
     {{- end }}
@@ -67,7 +67,7 @@
         - {{ . }}
       {{- end }}
     {{- end }}
-    {{- if eq .Values.livenessProbe.type "tcp" }}
+    {{- if or (eq .Values.livenessProbe.type "tcp") (eq .Values.livenessProbe.type "tcpSocket") }}
     tcpSocket:
       port: {{ .Values.containerPort }}
     {{- end }}

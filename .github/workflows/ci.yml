@@ -8,6 +8,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Helm
         uses: azure/setup-helm@v4
+      - name: Install Helm plugins
+        run: |
+          helm plugin install https://github.com/helm-unittest/helm-unittest
       - name: Lint and Test
         run: |
           make lint
