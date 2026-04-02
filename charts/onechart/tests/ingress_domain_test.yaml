@@ -29,6 +29,8 @@ tests:
                           number: 80
   - it: Should set Ingress annotation
     set:
+      kong:
+        enabled: true
       ingress:
         host: chart-example.local
         annotations:
