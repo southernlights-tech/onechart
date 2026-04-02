@@ -1,72 +1,91 @@
-{{- define "common.container.tpl" -}}
-name: {{ template "robustName" .Release.Name }}
-securityContext:
-  {{- toYaml .Values.securityContext | nindent 2 }}
-image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{- if .Values.command }}
-command:
-  - {{ .Values.shell }}
-  - -c
-  - {{ .Values.command | quote }}
-{{- end }}
-ports:
-  {{- if not .Values.ports }}
-  - name: http
-    containerPort: {{ .Values.containerPort }}
-    protocol: TCP
-  {{- else }}
-  {{- range .Values.ports }}
+{{- define "common.container" -}}
+- name: {{ .Values.name | default .Release.Name }}
+  image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+  imagePullPolicy: {{ .Values.image.pullPolicy }}
+  {{- with .Values.command }}
+  command:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.args }}
+  args:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.env }}
+  env:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.envFrom }}
+  envFrom:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ports:
+  {{- range .Values.extraPorts }}
   - name: {{ .name }}
     containerPort: {{ .containerPort }}
     protocol: TCP
   {{- end }}
+  {{- if .Values.containerPort }}
+  - name: {{ .Values.portName | default "http" }}
+    containerPort: {{ .Values.containerPort }}
+    protocol: TCP
   {{- end }}
-{{- if .Values.probe.enabled }}
-readinessProbe:
-  {{- if or (eq .Values.probe.type "http") (and (not .Values.probe.type) .Values.probe.path) }}
-  httpGet:
-    path: {{ .Values.probe.path }}
-    port: {{ .Values.containerPort }}
-    scheme: HTTP
-  {{- end }}
-  {{- if eq .Values.probe.type "exec" }}
-  exec:
-    command:
-    {{- range .Values.probe.command }}
-      - {{ . }}
+  {{- if .Values.probe.enabled }}
+  readinessProbe:
+    {{- if or (eq .Values.probe.type "http") (and (not .Values.probe.type) .Values.probe.path) }}
+    httpGet:
+      path: {{ .Values.probe.path }}
+      port: {{ .Values.containerPort }}
+      scheme: HTTP
+    {{- end }}
+    {{- if eq .Values.probe.type "exec" }}
+    exec:
+      command:
+      {{- range .Values.probe.command }}
+        - {{ . }}
+      {{- end }}
+    {{- end }}
+    {{- if eq .Values.probe.type "tcp" }}
+    tcpSocket:
+      port: {{ .Values.containerPort }}
+    {{- end }}
+    {{- with .Values.probe.settings }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}
-  {{- with .Values.probe.settings }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
-{{- end }}
-{{- if .Values.livenessProbe.enabled }}
-livenessProbe:
-  {{- if or (eq .Values.livenessProbe.type "http") (and (not .Values.livenessProbe.type) .Values.livenessProbe.path) }}
-  httpGet:
-    path: {{ .Values.livenessProbe.path }}
-    port: {{ .Values.containerPort }}
-    scheme: HTTP
-  {{- end }}
-  {{- if eq .Values.livenessProbe.type "exec" }}
-  exec:
-    command:
-    {{- range .Values.livenessProbe.command }}
-      - {{ . }}
+  {{- if .Values.livenessProbe.enabled }}
+  livenessProbe:
+    {{- if or (eq .Values.livenessProbe.type "http") (and (not .Values.livenessProbe.type) .Values.livenessProbe.path) }}
+    httpGet:
+      path: {{ .Values.livenessProbe.path }}
+      port: {{ .Values.containerPort }}
+      scheme: HTTP
+    {{- end }}
+    {{- if eq .Values.livenessProbe.type "exec" }}
+    exec:
+      command:
+      {{- range .Values.livenessProbe.command }}
+        - {{ . }}
+      {{- end }}
+    {{- end }}
+    {{- if eq .Values.livenessProbe.type "tcp" }}
+    tcpSocket:
+      port: {{ .Values.containerPort }}
+    {{- end }}
+    {{- with .Values.livenessProbe.settings }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}
-  {{- with .Values.livenessProbe.settings }}
-  {{- toYaml . | nindent 2 }}
+  {{- if not .Values.resources.ignore }}
+  resources:
+    {{- if .Values.resources.ignoreLimits }}
+    requests:
+      {{- toYaml .Values.resources.requests | nindent 6 }}
+    {{- else }}
+      {{- toYaml .Values.resources | nindent 4 }}
+    {{- end }}
   {{- end }}
-{{- end }}
-{{- if not .Values.resources.ignore }}
-resources:
-  {{- if .Values.resources.ignoreLimits }}
-  requests:
-    {{- toYaml .Values.resources.requests | nindent 4 }}
-  {{- else }}
-    {{- toYaml .Values.resources | nindent 2 }}
+  {{- with .Values.volumeMounts }}
+  volumeMounts:
+    {{- toYaml . | nindent 4 }}
   {{- end }}
-{{- end }}
 {{- end }}
