@@ -20,10 +20,15 @@ env:
 envFrom:
   {{- toYaml . | nindent 2 }}
 {{- end }}
-ports:
 {{- if .Values.ports }}
-{{- toYaml .Values.ports | nindent 0 }}
+ports:
+{{- range .Values.ports }}
+- name: {{ .name }}
+  containerPort: {{ .containerPort }}
+  protocol: {{ .protocol | default "TCP" }}
+{{- end }}
 {{- else }}
+ports:
 {{- range .Values.extraPorts }}
 - name: {{ .name }}
   containerPort: {{ .containerPort }}
