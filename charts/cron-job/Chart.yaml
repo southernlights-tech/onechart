@@ -16,6 +16,7 @@ type: application
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
 version: 0.75.0
+icon: https://raw.githubusercontent.com/southernlights-tech/onechart/main/onechart.png
 
 dependencies:
   - name: common
