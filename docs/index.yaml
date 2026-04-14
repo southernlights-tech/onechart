@@ -31,6 +31,20 @@ entries:
     version: 0.73.3
   onechart:
   - apiVersion: v2
+    created: "2026-04-14T17:14:14-03:00"
+    dependencies:
+    - name: common
+      repository: https://southernlights-tech.github.io/onechart/
+      version: 0.8.3
+    description: One chart to rule them all. A generic Helm chart for your application
+      deployments. Because no-one can remember the Kubernetes yaml syntax.
+    digest: 556fdc2474676d64739f8b9897d368d4e8405070cf25a7842b8406a0e3c92e83
+    name: onechart
+    type: application
+    urls:
+    - https://github.com/southernlights-tech/onechart/releases/download/onechart-0.76.0/onechart-0.76.0.tgz
+    version: 0.76.0
+  - apiVersion: v2
     created: "2025-10-28T10:14:33.168089087-03:00"
     dependencies:
     - name: common
