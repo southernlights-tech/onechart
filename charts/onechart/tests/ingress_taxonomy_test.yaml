@@ -4,6 +4,8 @@ templates:
 tests:
   - it: Should set Gimlet taxonomy on Ingress
     set:
+      kong:
+        enabled: true
       gitRepository: github.com/laszlocph/demo-app
       gitSha: xyz
       ingress:
@@ -15,4 +17,4 @@ tests:
           value:
             gimlet.io/git-repository: github.com/laszlocph/demo-app
             gimlet.io/git-sha: xyz
-
+            konghq.com/plugins: release-name-file-log

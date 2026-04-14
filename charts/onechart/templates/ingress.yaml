@@ -16,8 +16,17 @@ metadata:
   namespace: {{ .root.Release.Namespace }}
   labels:
     {{- include "helm-chart.labels" .root | nindent 4 }}
-  {{- if or (or (or .root.Values.gitSha .ingress.nginxBasicAuth) .ingress.annotations) .root.Values.gitRepository }}
+  {{- if or (or (or (or .root.Values.gitSha .ingress.nginxBasicAuth) .ingress.annotations) .root.Values.gitRepository) .root.Values.kong.enabled }}
   annotations:
+    # todo: add support for other ingress annotations
+    {{- if .root.Values.kong.enabled }}
+    konghq.com/plugins: {{ $resourceName }}-file-log
+      {{- if .root.Values.kong.plugins }}
+        {{- range $pluginName, $pluginConfig := .root.Values.kong.plugins }}
+          {{- if $pluginConfig.enabled }},{{ $resourceName }}-{{ $pluginName }}{{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
     {{- if .ingress.nginxBasicAuth }}
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: {{ $resourceName }}-basic-auth

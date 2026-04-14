@@ -34,3 +34,35 @@ constraints:
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 120
+
+# Run job immediately upon deployment/upgrade
+runJobOnDeploy:
+  enabled: false              # Default: disabled for backward compatibility
+  deleteOnSuccess: true       # Delete job after successful completion
+  backoffLimit: 5            # Number of retry attempts on failure
+  activeDeadlineSeconds: 1800 # Job timeout in seconds (30 minutes)
+
+secrets:
+  secretManager: {}
+  # Example configuration for AWS Secrets Manager:
+  # secretManager:
+  #   name: "my-secret-name"
+    # keys:
+  #     - "SECRET_KEY_1"
+  #     - "SECRET_KEY_2"
+  #   # Optional: Remap secret keys to different environment variable names
+  #   keyMappings:
+  #     SECRET_KEY_1: "ENV_VAR_1"   # Maps SECRET_KEY_1 -> ENV_VAR_1
+  #     SECRET_KEY_2: "ENV_VAR_2"   # Maps SECRET_KEY_2 -> ENV_VAR_2
+    # csi:
+  #     name: "secrets-store"
+  #     path: "/mnt/secrets-store"
+
+
+serviceAccountCreate: {}
+#   annotations:
+#     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/change-me
+
+# use this one if the service account already exists
+# serviceAccount: changeme
+

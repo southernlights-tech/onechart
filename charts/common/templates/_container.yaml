@@ -1,43 +1,87 @@
 {{- define "common.container.tpl" -}}
-name: {{ template "robustName" .Release.Name }}
-securityContext:
-  {{- toYaml .Values.securityContext | nindent 2 }}
+name: {{ .Values.name | default .Release.Name }}
 image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
 imagePullPolicy: {{ .Values.image.pullPolicy }}
 {{- if .Values.command }}
 command:
-  - {{ .Values.shell }}
-  - -c
+  - {{ .Values.shell | default "/bin/sh" }}
+  - "-c"
   - {{ .Values.command | quote }}
 {{- end }}
+{{- with .Values.args }}
+args:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.env }}
+env:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.envFrom }}
+envFrom:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- if .Values.ports }}
 ports:
-  {{- if not .Values.ports }}
-  - name: http
-    containerPort: {{ .Values.containerPort }}
-    protocol: TCP
-  {{- else }}
-  {{- range .Values.ports }}
-  - name: {{ .name }}
-    containerPort: {{ .containerPort }}
-    protocol: TCP
-  {{- end }}
-  {{- end }}
+{{- range .Values.ports }}
+- name: {{ .name }}
+  containerPort: {{ .containerPort }}
+  protocol: {{ .protocol | default "TCP" }}
+{{- end }}
+{{- else }}
+ports:
+{{- range .Values.extraPorts }}
+- name: {{ .name }}
+  containerPort: {{ .containerPort }}
+  protocol: TCP
+{{- end }}
+{{- if .Values.containerPort }}
+- name: {{ .Values.portName | default "http" }}
+  containerPort: {{ .Values.containerPort }}
+  protocol: TCP
+{{- end }}
+{{- end }}
 {{- if .Values.probe.enabled }}
 readinessProbe:
+  {{- if or (eq .Values.probe.type "http") (and (not .Values.probe.type) .Values.probe.path) }}
   httpGet:
     path: {{ .Values.probe.path }}
     port: {{ .Values.containerPort }}
     scheme: HTTP
+  {{- end }}
+  {{- if eq .Values.probe.type "exec" }}
+  exec:
+    command:
+    {{- range .Values.probe.command }}
+      - {{ . }}
+    {{- end }}
+  {{- end }}
+  {{- if or (eq .Values.probe.type "tcp") (eq .Values.probe.type "tcpSocket") }}
+  tcpSocket:
+    port: {{ .Values.containerPort }}
+  {{- end }}
   {{- with .Values.probe.settings }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
 {{- end }}
 {{- if .Values.livenessProbe.enabled }}
 livenessProbe:
+  {{- if or (eq .Values.livenessProbe.type "http") (and (not .Values.livenessProbe.type) .Values.livenessProbe.path) }}
   httpGet:
     path: {{ .Values.livenessProbe.path }}
     port: {{ .Values.containerPort }}
     scheme: HTTP
+  {{- end }}
+  {{- if eq .Values.livenessProbe.type "exec" }}
+  exec:
+    command:
+    {{- range .Values.livenessProbe.command }}
+      - {{ . }}
+    {{- end }}
+  {{- end }}
+  {{- if or (eq .Values.livenessProbe.type "tcp") (eq .Values.livenessProbe.type "tcpSocket") }}
+  tcpSocket:
+    port: {{ .Values.containerPort }}
+  {{- end }}
   {{- with .Values.livenessProbe.settings }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
@@ -50,5 +94,9 @@ resources:
   {{- else }}
     {{- toYaml .Values.resources | nindent 2 }}
   {{- end }}
+{{- end }}
+{{- with .Values.volumeMounts }}
+volumeMounts:
+  {{- toYaml . | nindent 2 }}
 {{- end }}
 {{- end }}

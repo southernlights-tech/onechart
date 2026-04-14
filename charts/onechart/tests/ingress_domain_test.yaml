@@ -29,6 +29,8 @@ tests:
                           number: 80
   - it: Should set Ingress annotation
     set:
+      kong:
+        enabled: true
       ingress:
         host: chart-example.local
         annotations:
@@ -38,6 +40,7 @@ tests:
           path: metadata.annotations
           value:
             just/a-random: annotation
+            konghq.com/plugins: release-name-file-log
   - it: Should set ingress class
     set:
       ingress:
