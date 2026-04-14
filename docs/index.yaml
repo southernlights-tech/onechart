@@ -1,5 +1,14 @@
 apiVersion: v1
 entries:
+  common:
+  - apiVersion: v2
+    created: "2026-04-14T17:45:00Z"
+    description: Common library chart for Helm.
+    digest: 1f37b68d279f37273fa212578ab2f523fb03a5c30a7ec252b23e7dfbc542bb7a
+    name: common
+    urls:
+    - common-0.8.2.tgz
+    version: 0.8.2
   cron-job:
   - apiVersion: v2
     created: "2025-10-28T10:14:33.152977012-03:00"
