@@ -158,6 +158,59 @@
         1
       ]
     },
+    "strategy": {
+      "$id": "#/properties/strategy",
+      "oneOf": [
+        {
+          "type": "string",
+          "title": "Strategy Type (Simple)",
+          "description": "Deployment strategy type as a string",
+          "enum": ["RollingUpdate", "Recreate"],
+          "default": "RollingUpdate"
+        },
+        {
+          "type": "object",
+          "title": "Strategy Configuration",
+          "description": "Deployment strategy configuration object",
+          "default": {},
+          "properties": {
+            "type": {
+              "type": "string",
+              "title": "Strategy Type",
+              "description": "Type of deployment strategy",
+              "enum": ["RollingUpdate", "Recreate"],
+              "default": "RollingUpdate"
+            },
+            "rollingUpdate": {
+              "type": "object",
+              "title": "Rolling Update Parameters",
+              "description": "Parameters for rolling update strategy",
+              "default": {},
+              "properties": {
+                "maxSurge": {
+                  "oneOf": [
+                    {"type": "string"},
+                    {"type": "integer"}
+                  ],
+                  "title": "Max Surge",
+                  "description": "Maximum number of pods that can be scheduled above desired number",
+                  "default": "25%"
+                },
+                "maxUnavailable": {
+                  "oneOf": [
+                    {"type": "string"},
+                    {"type": "integer"}
+                  ],
+                  "title": "Max Unavailable",
+                  "description": "Maximum number of pods that can be unavailable during update",
+                  "default": 0
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "podDisruptionBudgetEnabled": {
       "$id": "#/properties/podDisruptionBudgetEnabled",
       "type": "boolean",
@@ -435,7 +488,6 @@
             }
           ],
           "required": [
-            "cpu",
             "memory"
           ],
           "properties": {
@@ -779,6 +831,70 @@
       "properties": {},
       "additionalProperties": true
     },
+    "secrets": {
+      "$id": "#/properties/secrets",
+      "type": "object",
+      "title": "Secrets configuration",
+      "description": "Configuration for various secret management options",
+      "default": {},
+      "properties": {
+        "secretManager": {
+          "$id": "#/properties/secrets/properties/secretManager",
+          "type": "object",
+          "title": "AWS Secrets Manager",
+          "description": "Configuration for AWS Secrets Manager integration",
+          "default": {},
+          "properties": {
+            "name": {
+              "$id": "#/properties/secrets/properties/secretManager/properties/name",
+              "type": "string",
+              "title": "Secret Name",
+              "description": "The name of the secret in AWS Secrets Manager",
+              "default": ""
+            },
+            "keys": {
+              "$id": "#/properties/secrets/properties/secretManager/properties/keys",
+              "type": "array",
+              "title": "Secret Keys",
+              "description": "Array of secret keys to retrieve from AWS Secrets Manager",
+              "default": [],
+              "items": {
+                "type": "string"
+              }
+            },
+            "keyMappings": {
+              "$id": "#/properties/secrets/properties/secretManager/properties/keyMappings",
+              "type": "object",
+              "title": "Key Mappings",
+              "description": "Optional mapping of secret keys to different environment variable names",
+              "default": {},
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "csi": {
+              "$id": "#/properties/secrets/properties/secretManager/properties/csi",
+              "type": "object",
+              "title": "CSI Configuration",
+              "description": "Configuration for Secrets Store CSI driver",
+              "default": {},
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "CSI Volume Name",
+                  "default": "secrets-store"
+                },
+                "path": {
+                  "type": "string",
+                  "title": "Mount Path",
+                  "default": "/mnt/secrets-store"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "ingress": {
       "$id": "#/properties/ingress",
       "type": "object",
@@ -899,6 +1015,70 @@
             ]
           }
         ]
+      }
+    },
+    "stickySessions": {
+      "$id": "#/properties/stickySessions",
+      "type": "boolean",
+      "title": "Sticky Sessions (Deprecated)",
+      "description": "Legacy boolean flag for session affinity. Use sessionAffinity instead.",
+      "default": false
+    },
+    "sessionAffinity": {
+      "$id": "#/properties/sessionAffinity",
+      "type": "object",
+      "title": "Session Affinity Configuration",
+      "description": "Configure service session affinity for sticky sessions",
+      "default": {},
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Session Affinity",
+          "description": "Enable session affinity for the service",
+          "default": false
+        },
+        "type": {
+          "type": "string",
+          "title": "Session Affinity Type",
+          "description": "Type of session affinity",
+          "enum": ["ClientIP", "None"],
+          "default": "ClientIP"
+        },
+        "config": {
+          "type": "object",
+          "title": "Session Affinity Configuration",
+          "properties": {
+            "clientIP": {
+              "type": "object",
+              "properties": {
+                "timeoutSeconds": {
+                  "type": "integer",
+                  "title": "Timeout Seconds",
+                  "description": "Session timeout in seconds",
+                  "default": 10800,
+                  "minimum": 1,
+                  "maximum": 86400
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "service": {
+      "$id": "#/properties/service",
+      "type": "object",
+      "title": "Service Configuration",
+      "description": "Additional service configuration options",
+      "default": {},
+      "properties": {
+        "externalTrafficPolicy": {
+          "type": "string",
+          "title": "External Traffic Policy",
+          "description": "External traffic policy for LoadBalancer and NodePort services",
+          "enum": ["Local", "Cluster"],
+          "default": "Cluster"
+        }
       }
     },
     "volumes": {
@@ -1156,6 +1336,78 @@
             ]
           }
         ]
+      }
+    },
+    "kong": {
+      "type": "object",
+      "title": "Kong Configuration",
+      "description": "Configuration for Kong plugins and settings",
+      "properties": {
+        "plugins": {
+          "type": "object",
+          "title": "Kong Plugins",
+          "description": "Custom Kong plugins configuration",
+          "patternProperties": {
+            "^[a-zA-Z0-9-_]+$": {
+              "type": "object",
+              "title": "Kong Plugin",
+              "description": "Configuration for a Kong plugin",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "title": "Enable Plugin",
+                  "description": "Enable this Kong plugin",
+                  "default": false
+                },
+                "plugin": {
+                  "type": "string",
+                  "title": "Plugin Type",
+                  "description": "The Kong plugin type (e.g., rate-limiting, response-transformer, etc.)",
+                  "examples": ["rate-limiting", "response-transformer", "request-transformer", "cors", "jwt", "oauth2"]
+                },
+                "config": {
+                  "type": "object",
+                  "title": "Plugin Configuration",
+                  "description": "Plugin-specific configuration object",
+                  "additionalProperties": true
+                },
+                "protocols": {
+                  "type": "array",
+                  "title": "Protocols",
+                  "description": "List of protocols this plugin applies to",
+                  "items": {
+                    "type": "string",
+                    "enum": ["http", "https", "grpc", "grpcs", "tcp", "tls"]
+                  }
+                },
+                "disabled": {
+                  "type": "boolean",
+                  "title": "Disabled",
+                  "description": "Whether the plugin is disabled",
+                  "default": false
+                },
+                "labels": {
+                  "type": "object",
+                  "title": "Labels",
+                  "description": "Additional labels for the plugin resource",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "annotations": {
+                  "type": "object",
+                  "title": "Annotations",
+                  "description": "Additional annotations for the plugin resource",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["enabled", "plugin"]
+            }
+          },
+          "additionalProperties": false
+        }
       }
     }
   },

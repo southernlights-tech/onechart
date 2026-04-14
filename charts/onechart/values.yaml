@@ -18,6 +18,14 @@ image:
 
 replicas: 1
 
+# Default strategy provides zero-downtime deployments
+# Note: Single replica deployments with volumes will still use Recreate strategy
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 0
+
 nameOverride: ""
 fullnameOverride: ""
 
@@ -37,7 +45,6 @@ resources:
     cpu: "200m"
     memory: "200Mi"
   limits:
-    cpu: "200m"
     memory: "200Mi"
 
 nodeSelector: {}
@@ -46,7 +53,9 @@ tolerations: []
 
 probe:
   enabled: false
+  type: "http"
   path: "/"
+  command: ["uname", "-a"]
   settings:
     initialDelaySeconds: 0
     periodSeconds: 10
@@ -74,9 +83,96 @@ spreadAcrossNodes: false
 
 nodePortEnabled: false
 
+# Sticky sessions support (with default settings)
+# stickySessions: false
+
+# Session affinity configuration for advanced sticky sessions
+# sessionAffinity:
+#   enabled: true
+#   type: "ClientIP"  # or "None"
+#   config:
+#     clientIP:
+#       timeoutSeconds: 10800  # 3 hours in seconds
+
+# Additional service configuration
+# service:
+#   externalTrafficPolicy: "Local"  # or "Cluster"
+
 # Set true to enable service monitor.
 monitor:
   enabled: false
 
 container: {}
 podSpec: {}
+
+secrets:
+  secretManager: {}
+  # Example configuration for AWS Secrets Manager:
+  # secretManager:
+  #   name: "my-secret-name"
+  #   keys:
+  #     - "SECRET_KEY_1"
+  #     - "SECRET_KEY_2"
+  #   # Optional: Remap secret keys to different environment variable names
+  #   keyMappings:
+  #     SECRET_KEY_1: "ENV_VAR_1"   # Maps SECRET_KEY_1 -> ENV_VAR_1
+  #     SECRET_KEY_2: "ENV_VAR_2"   # Maps SECRET_KEY_2 -> ENV_VAR_2
+  #   csi:
+  #     name: "secrets-store"
+  #     path: "/mnt/secrets-store"
+
+serviceAccountCreate: {}
+
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 50
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        type: Pods
+        value: 5
+        periodSeconds: 300
+    scaleUp:
+      stabilizationWindowSeconds: 15
+      policies:
+        type: Pods
+        value: 10
+        periodSeconds: 15
+  # cpuAverageUtilization: percentage of the requested value of the resource for the pods.
+  # memoryAverageUtilization: percentage of the requested value of the resource for the pods.
+
+# Kong plugin configurations
+kong:
+  enabled: false
+  plugins: {}
+    # Example CORS plugin using response-transformer
+    # cors:
+    #   enabled: false
+    #   plugin: response-transformer
+    #   config:
+    #     append:
+    #       headers:
+    #         - "access-control-allow-origin:https://example.com"
+    #         - "access-control-allow-credentials:true"
+    
+    # Example rate limiting plugin
+    # rate-limit:
+    #   enabled: false
+    #   plugin: rate-limiting
+    #   config:
+    #     minute: 100
+    #     hour: 1000
+    #     policy: local
+    
+    # Example request transformer plugin
+    # request-transformer:
+    #   enabled: false
+    #   plugin: request-transformer
+    #   config:
+    #     add:
+    #       headers:
+    #         - "X-Custom-Header:custom-value"
+    #     remove:
+    #       headers:
+    #         - "X-Remove-Header"

@@ -7,6 +7,7 @@ tests:
     set:
       livenessProbe:
         enabled: true
+        type: "http"
     asserts:
       - template: deployment.yaml
         documentIndex: 0
@@ -32,6 +33,7 @@ tests:
     set:
       livenessProbe:
         enabled: true
+        type: "http"
         settings:
           periodSeconds: 30
     asserts:
@@ -48,4 +50,51 @@ tests:
             periodSeconds: 30
             successThreshold: 1
             timeoutSeconds: 3
+            failureThreshold: 3
+  - it: Should set an exec liveness probe
+    set:
+      livenessProbe:
+        enabled: true
+        type: "exec"
+        command: ["sh", "-c", "ps aux | grep nginx"]
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            exec:
+              command:
+                - "sh"
+                - "-c"
+                - "ps aux | grep nginx"
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            failureThreshold: 3
+  - it: Should tune exec liveness probe
+    set:
+      livenessProbe:
+        enabled: true
+        type: "exec"
+        command: ["test", "-f", "/tmp/healthy"]
+        settings:
+          periodSeconds: 15
+          timeoutSeconds: 5
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            exec:
+              command:
+                - "test"
+                - "-f"
+                - "/tmp/healthy"
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
             failureThreshold: 3
