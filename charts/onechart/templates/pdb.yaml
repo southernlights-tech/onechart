@@ -2,11 +2,21 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "robustName" .Release.Name }}
+  name: {{ template "robustName" (.Values.releaseNameOverride | default .Release.Name) }}
   namespace: {{ .Release.Namespace }}
 spec:
-  minAvailable: 1
+  {{- if .Values.pdb }}
+    {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
+    {{- else if .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+    {{- else }}
+  maxUnavailable: 50%
+    {{- end }}
+  {{- else }}
+  maxUnavailable: 50% # Default to maxUnavailable: 50% for safety
+  {{- end }}
   selector:
     matchLabels:
       {{- include "helm-chart.selectorLabels" . | nindent 6 }}
-  {{- end }}
+{{- end }}

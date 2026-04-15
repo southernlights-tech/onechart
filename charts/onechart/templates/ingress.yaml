@@ -1,6 +1,6 @@
 {{/* OneChart ingress snippet */}}
 {{- define "onechart.ingress" }}
-{{- $robustName := include "robustName" .root.Release.Name -}}
+{{- $robustName := include "robustName" (.root.Values.releaseNameOverride | default .root.Release.Name) -}}
 {{- $resourceName := $robustName -}}
 {{- if .longName }}
 {{- $resourceName = printf "%s-%s" $robustName (include "robustName" .ingress.host) -}}
@@ -20,11 +20,6 @@ metadata:
   annotations:
     # todo: add support for other ingress annotations
     konghq.com/plugins: {{ $resourceName }}-file-log
-      {{- if .root.Values.kong.plugins }}
-        {{- range $pluginName, $pluginConfig := .root.Values.kong.plugins }}
-          {{- if $pluginConfig.enabled }},{{ $resourceName }}-{{ $pluginName }}{{- end }}
-        {{- end }}
-      {{- end }}
     {{- if .ingress.nginxBasicAuth }}
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: {{ $resourceName }}-basic-auth

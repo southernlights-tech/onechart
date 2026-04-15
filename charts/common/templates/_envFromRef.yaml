@@ -1,36 +1,37 @@
 {{- define "common.envFromRef.tpl" -}}
-{{- if or (or (or (or (or (.Values.secrets.secretManager) (.Values.vars) (.Values.secretEnabled)) .Values.sealedSecrets) .Values.secretName) .Values.existingConfigMaps) .Values.existingSecrets -}}
-envFrom:
-{{- if .Values.vars }}
-  - configMapRef:
-      name: {{ template "common.robustName" .Release.Name }}
-{{- end }}
-{{- range .Values.existingSecrets }}
-  - secretRef:
-      name: {{ .name }}
-      optional: {{ .optional | default false }}
-{{- end }}
-{{- range .Values.existingConfigMaps }}
-  - configMapRef:
-      name: {{ .name }}
-      optional: {{ .optional | default false }}
-{{- end }}
-{{- if .Values.secretEnabled }}
-  - secretRef:
-      name: {{ include "common.robustName" $.Release.Name }}
-{{- end }}
-{{- if .Values.secretName }}
-  - secretRef:
-      name: {{ .Values.secretName }}
-{{- end }}
-{{- if .Values.sealedSecrets }}
-  - secretRef:
-      name: {{ template "common.robustName" .Release.Name }}
-{{- end }}
-{{- if .Values.secrets.secretManager }}
-  - secretRef:
-      name: {{ template "common.robustName" .Release.Name }}-csi
-{{- end }}
+{{- $items := list -}}
+{{- if .Values.existingSecrets -}}
+{{- range .Values.existingSecrets -}}
+{{- $items = append $items (dict "type" "secretRef" "name" .name "optional" (default false .optional)) -}}
+{{- end -}}
+{{- end -}}
 
+{{- if .Values.existingConfigMaps -}}
+{{- range .Values.existingConfigMaps -}}
+{{- $items = append $items (dict "type" "configMapRef" "name" .name "optional" (default false .optional)) -}}
+{{- end -}}
+{{- end -}}
+
+{{- $smItems := include "common.secretManagerItems" . | trim -}}
+{{- if and $smItems (ne $smItems "[]") -}}
+{{- $data := fromJson (printf "{\"items\": %s}" $smItems) -}}
+{{- range $item := $data.items -}}
+{{- $items = append $items (dict "type" "secretRef" "name" (index $item "volumeName") "optional" false) -}}
+{{- end -}}
+{{- end -}}
+
+{{- if .Values.vars -}}
+{{- $items = append $items (dict "type" "configMapRef" "name" (include "common.robustName" (include "common.releaseNameOverride" .)) "optional" false) -}}
+{{- end -}}
+
+{{- if gt (len $items) 0 }}
+envFrom:
+{{- range $item := $items }}
+  - {{ index $item "type" }}:
+      name: {{ index $item "name" }}
+      {{- if index $item "optional" }}
+      optional: true
+      {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}

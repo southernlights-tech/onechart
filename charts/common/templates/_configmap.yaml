@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "common.robustName" .Release.Name }}
+  name: {{ template "common.robustName" (include "common.releaseNameOverride" .) }}
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "helm-chart.labels" . | nindent 4 }}

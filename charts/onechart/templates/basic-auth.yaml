@@ -1,5 +1,5 @@
 {{ if .Values.ingress }}{{ if .Values.ingress.nginxBasicAuth }}
-{{- $robustName := include "robustName" .Release.Name -}}
+{{- $robustName := include "robustName" (.Values.releaseNameOverride | default .Release.Name) -}}
 {{- $resourceName := $robustName -}}
 apiVersion: v1
 kind: Secret

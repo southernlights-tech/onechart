@@ -1,8 +1,18 @@
 apiVersion: v1
 entries:
+  common:
+  - apiVersion: v2
+    created: "2026-04-15T15:16:04.030876021-03:00"
+    description: A Helm chart for Kubernetes
+    digest: e45a185e27d2dd47b9e39347bc7f4c300b8e2002d608c894c058887d31f14e26
+    name: common
+    type: library
+    urls:
+    - https://southernlights-tech.github.io/onechart/common-0.9.0.tgz
+    version: 0.9.0
   cron-job:
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.152977012-03:00"
+    created: "2026-04-15T15:16:04.031975522-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -13,10 +23,10 @@ entries:
     name: cron-job
     type: application
     urls:
-    - cron-job-0.73.7.tgz
+    - https://southernlights-tech.github.io/onechart/cron-job-0.73.7.tgz
     version: 0.73.7
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.151770748-03:00"
+    created: "2026-04-15T15:16:04.031426784-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -27,25 +37,25 @@ entries:
     name: cron-job
     type: application
     urls:
-    - cron-job-0.73.3.tgz
+    - https://southernlights-tech.github.io/onechart/cron-job-0.73.3.tgz
     version: 0.73.3
   onechart:
   - apiVersion: v2
-    created: "2026-04-14T17:31:45.999717254-03:00"
+    created: "2026-04-15T15:16:04.03947124-03:00"
     dependencies:
     - name: common
-      repository: https://southernlights-tech.github.io/onechart/
-      version: 0.8.2
+      repository: file://../common
+      version: 0.9.0
     description: One chart to rule them all. A generic Helm chart for your application
       deployments. Because no-one can remember the Kubernetes yaml syntax.
-    digest: 556fdc2474676d64739f8b9897d368d4e8405070cf25a7842b8406a0e3c92e83
+    digest: 09070f91d274c3a3198013e76d0c55b4b77f73768264d6a8cdc506d5fe95b9d8
     name: onechart
     type: application
     urls:
-    - https://github.com/southernlights-tech/onechart/releases/download/onechart-0.76.0/onechart-0.76.0.tgz
-    version: 0.76.0
+    - https://southernlights-tech.github.io/onechart/onechart-0.77.1.tgz
+    version: 0.77.0
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.168089087-03:00"
+    created: "2026-04-15T15:16:04.038204212-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -56,10 +66,10 @@ entries:
     name: onechart
     type: application
     urls:
-    - onechart-0.75.3.tgz
+    - https://southernlights-tech.github.io/onechart/onechart-0.75.3.tgz
     version: 0.75.3
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.165999095-03:00"
+    created: "2026-04-15T15:16:04.037390021-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -70,10 +80,10 @@ entries:
     name: onechart
     type: application
     urls:
-    - onechart-0.74.5.tgz
+    - https://southernlights-tech.github.io/onechart/onechart-0.74.5.tgz
     version: 0.74.5
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.162777012-03:00"
+    created: "2026-04-15T15:16:04.036603632-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -84,10 +94,10 @@ entries:
     name: onechart
     type: application
     urls:
-    - onechart-0.74.3.tgz
+    - https://southernlights-tech.github.io/onechart/onechart-0.74.3.tgz
     version: 0.74.3
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.160597829-03:00"
+    created: "2026-04-15T15:16:04.035826261-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -98,10 +108,10 @@ entries:
     name: onechart
     type: application
     urls:
-    - onechart-0.74.2.tgz
+    - https://southernlights-tech.github.io/onechart/onechart-0.74.2.tgz
     version: 0.74.2
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.158516148-03:00"
+    created: "2026-04-15T15:16:04.0350227-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -112,10 +122,10 @@ entries:
     name: onechart
     type: application
     urls:
-    - onechart-0.74.1-rc2.tgz
+    - https://southernlights-tech.github.io/onechart/onechart-0.74.1-rc2.tgz
     version: 0.74.1-rc2
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.156403178-03:00"
+    created: "2026-04-15T15:16:04.03424589-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -126,10 +136,10 @@ entries:
     name: onechart
     type: application
     urls:
-    - onechart-0.74.1-rc1.tgz
+    - https://southernlights-tech.github.io/onechart/onechart-0.74.1-rc1.tgz
     version: 0.74.1-rc1
   - apiVersion: v2
-    created: "2025-10-28T10:14:33.154694809-03:00"
+    created: "2026-04-15T15:16:04.03274059-03:00"
     dependencies:
     - name: common
       repository: file://../common
@@ -140,6 +150,6 @@ entries:
     name: onechart
     type: application
     urls:
-    - onechart-0.74.0.tgz
+    - https://southernlights-tech.github.io/onechart/onechart-0.74.0.tgz
     version: 0.74.0
-generated: "2026-04-14T17:31:45.999717254-03:00"
+generated: "2026-04-15T15:16:04.030556296-03:00"
