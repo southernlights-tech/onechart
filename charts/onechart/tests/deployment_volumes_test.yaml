@@ -249,14 +249,14 @@ tests:
           path: spec.template.spec.volumes
           value:
           - name: init-volume
-            emptyDir: {} 
+            emptyDir: {}
       - template: deployment.yaml
         documentIndex: 0
         equal:
           path: spec.template.spec.initContainers[0].volumeMounts
           value:
           - name: init-volume
-            mountPath: /data 
+            mountPath: /data
       - template: deployment.yaml
         documentIndex: 0
         notEqual:
@@ -275,20 +275,20 @@ tests:
           path: /data
           emptyDir: true
     asserts:
-      - template: deployment.yaml
-        documentIndex: 0
-        equal:
-          path: spec.template.spec.initContainers[0].volumeMounts
-          value:
-          - name: shared-volume
-            mountPath: /data
-      - template: deployment.yaml
-        documentIndex: 0
-        equal:
-          path: spec.template.spec.containers[0].volumeMounts
-          value:
-          - name: shared-volume
-            mountPath: /data      
+       - template: deployment.yaml
+         documentIndex: 0
+         equal:
+           path: spec.template.spec.initContainers[0].volumeMounts
+           value:
+           - name: shared-volume
+             mountPath: /data
+       - template: deployment.yaml
+         documentIndex: 0
+         equal:
+           path: spec.template.spec.containers[0].volumeMounts
+           value:
+             - name: shared-volume
+               mountPath: /data
   - it: Should not create PVC when using existing secret
     set:
       volumes:

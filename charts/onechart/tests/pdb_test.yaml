@@ -1,11 +1,52 @@
-suite: test prometheus rule
+suite: test pdb
 templates:
   - pdb.yaml
 tests:
-  - it: Should set Pod Disruption budget
+  - it: should render default maxUnavailable 50% when enabled
     set:
+      podDisruptionBudgetEnabled: true
       replicas: 2
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget
+      - equal:
+          path: spec.maxUnavailable
+          value: 50%
+
+  - it: should allow overriding with explicit maxUnavailable
+    set:
+      podDisruptionBudgetEnabled: true
+      replicas: 10
+      pdb:
+        maxUnavailable: 2
+    asserts:
+      - equal:
+          path: spec.maxUnavailable
+          value: 2
+
+  - it: should allow overriding with explicit minAvailable (backward compatibility)
+    set:
+      podDisruptionBudgetEnabled: true
+      replicas: 10
+      pdb:
+        minAvailable: 5
     asserts:
       - equal:
           path: spec.minAvailable
-          value: 1
+          value: 5
+
+  - it: should not render pdb if replicas is 1
+    set:
+      podDisruptionBudgetEnabled: true
+      replicas: 1
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should not render pdb if podDisruptionBudgetEnabled is false
+    set:
+      podDisruptionBudgetEnabled: false
+      replicas: 2
+    asserts:
+      - hasDocuments:
+          count: 0

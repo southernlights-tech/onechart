@@ -2,7 +2,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "robustName".Release.Name }}
+  name: {{ template "robustName" (.Values.releaseNameOverride | default .Release.Name) }}
   namespace: {{ .Release.Namespace }}
 spec:
   minReplicas: {{ .Values.autoscaling.minReplicas }}
@@ -10,7 +10,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "robustName".Release.Name }}
+    name: {{ template "robustName" (.Values.releaseNameOverride | default .Release.Name) }}
   behavior:
     scaleDown:
       stabilizationWindowSeconds: {{ .Values.autoscaling.behavior.scaleDown.stabilizationWindowSeconds }}
