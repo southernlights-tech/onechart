@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "robustName" .Release.Name }}
+  name: {{ template "robustName" (.Values.releaseNameOverride | default .Release.Name) }}
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "helm-chart.labels" . | nindent 4 }}

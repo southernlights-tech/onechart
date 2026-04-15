@@ -1,5 +1,5 @@
 {{- define "common.container.tpl" -}}
-name: {{ template "robustName" .Release.Name }}
+name: {{ template "robustName" (include "common.releaseNameOverride" .) }}
 securityContext:
   {{- toYaml .Values.securityContext | nindent 2 }}
 image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"

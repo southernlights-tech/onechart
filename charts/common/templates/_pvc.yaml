@@ -1,7 +1,7 @@
 {{- define "common.pvc.tpl" -}}
 {{- range .Values.volumes }}
 {{- if not (or .existingClaim .hostPath .fileName .emptyDir .existingConfigMap .existingSecret) }}
-{{- $robustName := include "common.robustName" $.Release.Name }}
+{{- $robustName := include "common.robustName" (include "common.releaseNameOverride" $) }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -11,7 +11,7 @@ metadata:
   {{- if .pvcAnnotations }}
   annotations:
     {{- toYaml .pvcAnnotations | nindent 4 }}
-  {{- end }} 
+  {{- end }}
 spec:
   accessModes:
     - {{ .accessMode | default "ReadWriteOnce" }}

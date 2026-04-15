@@ -48,7 +48,7 @@ Selector labels
 */}}
 {{- define "helm-chart.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "helm-chart.name" . }}
-app.kubernetes.io/instance: {{ template "robustName" .Release.Name }}
+app.kubernetes.io/instance: {{ template "robustName" (.Values.releaseNameOverride | default .Release.Name) }}
 {{- end }}
 
 {{/*

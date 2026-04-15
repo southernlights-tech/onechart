@@ -1,0 +1,30 @@
+suite: test onechart vars rendering
+templates:
+  - configmap.yaml
+  - deployment.yaml
+tests:
+  - it: Should generate ConfigMap from vars
+    set:
+      releaseNameOverride: pgbouncer
+      vars:
+        AUTH_TYPE: plain
+        DB_USER: ashvin
+    asserts:
+      - template: configmap.yaml
+        equal:
+          path: data.AUTH_TYPE
+          value: "plain"
+      - template: configmap.yaml
+        equal:
+          path: data.DB_USER
+          value: "ashvin"
+  - it: Should reference ConfigMap in Deployment
+    set:
+      releaseNameOverride: pgbouncer
+      vars:
+        AUTH_TYPE: plain
+    asserts:
+      - template: deployment.yaml
+        equal:
+          path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
+          value: pgbouncer

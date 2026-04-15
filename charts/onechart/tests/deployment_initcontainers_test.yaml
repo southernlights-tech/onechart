@@ -3,7 +3,7 @@ templates:
   - deployment.yaml
   - configmap.yaml
 tests:
-  - it: Should set name, image and tag  
+  - it: Should set name, image and tag
     set:
       initContainers:
         - name: pod1
@@ -20,7 +20,7 @@ tests:
         equal:
           path: spec.template.spec.initContainers[0].image
           value: "nginx:1.2.2"
-  - it: Should set command  
+  - it: Should set command
     set:
       initContainers:
         - name: pod1
@@ -50,3 +50,22 @@ tests:
         equal:
           path: spec.template.spec.initContainers[0].securityContext.runAsNonRoot
           value: true
+
+  - it: Should mount secret manager volumes in initContainers
+    set:
+      secrets.secretManager.name: my-secret
+      secrets.secretManager.keys: ["key1"]
+      secrets.secretManager.csi.path: /mnt/secrets-store
+      initContainers:
+        - name: pod1
+          image: nginx
+          tag: 1.2.2
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        contains:
+          path: spec.template.spec.initContainers[0].volumeMounts
+          content:
+            name: release-name-csi
+            mountPath: /mnt/secrets-store
+            readOnly: true
