@@ -1,0 +1,19 @@
+### Description
+This PR implements the integration of Darwin with GitHub-native backlogs (specifically for `boardissues`), enabling full issue management capabilities without JIRA dependency.
+
+### Changes
+* **Subagent `darwin-gh` Upgrade**: Added capabilities to list, view, label, and comment on GitHub Issues.
+* **Governance Logic Matrix**: 
+    - Added **Section 2.2** for GitHub-Only state mapping (`grooming`, `ready`, `dev-active`, `review`).
+    - Added **Section 2.3** defining the Definition of Done (DoD) for GitHub projects.
+* **Branch Naming Standard**: Formalized the convention `<type>/<short-description>` in **Section 2.4**.
+
+### Acceptance Criteria (ACs) Verified:
+* [x] **AC 1: Backlog Retrieval**: Darwin can list and filter open issues from `boardissues`.
+* [x] **AC 2: State Synchronization**: Darwin can update labels and add progress comments.
+* [x] **AC 3: Logic Matrix Integration**: Mapping documented in `darwin-logic_matrix.md`.
+* [x] **AC 4: Traceability**: Commit messages prefixed with GitHub Issue ID `[#30]`.
+* [x] **AC 5: Security**: `gh` CLI scoped correctly for repo/issue access.
+
+### Related Issues
+* Fixes southernlights-tech/boardissues#30

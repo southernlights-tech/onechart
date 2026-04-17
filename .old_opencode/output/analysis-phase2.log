@@ -1,0 +1,25 @@
+🤖 EXPLICACIÓN DE COMENTARIOS
+
+Comentario #1 (Copilot):
+Original: "Statement returns null when attachers_principals is empty"
+Explicación: "El operador ternario en la política IAM retorna null si la lista
+de principals está vacía. Esto causa un error en AWS porque null no es válido
+en un array de statements de política JSON."
+Por qué importa: Es un error crítico que impide que Terraform aplique la configuración
+Acción: Cambiar de ternario a bloque dinámico (dynamic block)
+Severidad: CRÍTICO
+
+Comentario #2 (Copilot):
+Original: "Add multi-AZ support for key replication"
+Explicación: "Se recomienda habilitar Multi-Region key replication para que la clave
+esté disponible en múltiples regiones de AWS. Esto mejora disponibilidad y recuperación
+ante desastres."
+Por qué importa: Mejora resilencia de la infraestructura
+Acción: Agregar parámetro enable_key_rotation y enable_multi_region
+Severidad: MEDIO
+
+Comentario #3 (Humano - lachoxsl):
+Original: "Ready for review"
+Traducción/Explicación: "Listo para revisar" - El PR está completo y esperando feedback
+
+✅ Phase 2 completada en ESPAÑOL.

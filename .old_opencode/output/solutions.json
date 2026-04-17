@@ -1,0 +1,708 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "generated_at": "2026-02-18T11:30:00Z",
+    "pr_number": 29,
+    "pr_title": "feat: implement KMS Terraform management for SOPS (DEV)",
+    "status": "proposed",
+    "note": "Solutions proposed. NEVER executes without approval."
+  },
+
+  "solutions": [
+    {
+      "id": "solution-1",
+      "linked_to": "next-step-1",
+      "problem": "Review KMS key policy for least privilege",
+      "severity": "HIGH",
+      "priority": "IMMEDIATE",
+      "why_important": "Verificar que la política KMS sigue principios de least privilege es crítico para seguridad. Si la policy es muy permisiva, aumenta la superficie de ataque. Además es auditable para SOC2/GDPR compliance.",
+      
+      "possible_solutions": [
+        {
+          "option": "A",
+          "title": "Security team deep-dive review",
+          "description": "Security team dedica tiempo a revisar línea por línea la policy, documentar cada permiso, verificar contra threat model.",
+          "pros": [
+            "Muy completo, cubre edge cases",
+            "Validación de especialista",
+            "Documentación detallada"
+          ],
+          "cons": [
+            "Toma ~30 minutos",
+            "Requiere especialista de seguridad disponible",
+            "Posible cuello de botella"
+          ],
+          "effort_minutes": 30,
+          "risk": "LOW",
+          "requires_specialist": true
+        },
+        {
+          "option": "B",
+          "title": "Checklist-based review",
+          "description": "Revisar policy contra checklist predefinido de least privilege. Checklist verifica: least privilege, deny rules, resource restrictions, etc.",
+          "pros": [
+            "Rápido (~15 min)",
+            "Reproducible, no depende de persona",
+            "Sistemático"
+          ],
+          "cons": [
+            "Puede perder edge cases",
+            "Requiere buen checklist",
+            "No tan profundo"
+          ],
+          "effort_minutes": 15,
+          "risk": "MEDIUM",
+          "requires_specialist": false
+        },
+        {
+          "option": "C",
+          "title": "IAM Policy Simulator + manual review",
+          "description": "Usar AWS IAM Policy Simulator para validar permiso por permiso. Simular principal (FluxRole, OperatorRole) contra cada acción. Luego revisar resultados.",
+          "pros": [
+            "Objetivo, basado en simulación real",
+            "Rápido (~20 min total)",
+            "Menos bias que manual puro",
+            "Reproducible"
+          ],
+          "cons": [
+            "Requiere setup en AWS Console/CLI",
+            "Puede no cubrir casos de networked policies"
+          ],
+          "effort_minutes": 20,
+          "risk": "LOW",
+          "requires_specialist": false
+        }
+      ],
+      
+      "recommended_solution": {
+        "option": "C",
+        "reason": "Combina objetividad de herramienta con validación manual. Mejor ROI: rápido, confiable, reproducible. No requiere especialista.",
+        "confidence": "HIGH"
+      },
+      
+      "implementation_steps": [
+        {
+          "step": 1,
+          "title": "Set up IAM Policy Simulator",
+          "description": "Acceder a AWS Console → IAM service → Policy Simulator. O usar CLI: aws iam simulate-principal-policy",
+          "commands": [
+            "# Option A: AWS Console",
+            "# Go to: Services → IAM → Simulate custom policy",
+            "",
+            "# Option B: AWS CLI",
+            "aws iam simulate-principal-policy \\",
+            "  --policy-source-arn arn:aws:iam::ACCOUNT:role/FluxCDRole \\",
+            "  --action-names kms:Decrypt \\",
+            "  --resource-arns arn:aws:kms:us-east-1:ACCOUNT:key/KEY_ID"
+          ],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 2,
+          "title": "Test Flux CD decrypt permission",
+          "description": "Simular que Flux CD role puede hacer kms:Decrypt en la key KMS de SOPS",
+          "commands": [
+            "aws iam simulate-principal-policy \\",
+            "  --policy-source-arn arn:aws:iam::ACCOUNT:role/k3s-flux-cd-role \\",
+            "  --action-names kms:Decrypt \\",
+            "  --resource-arns arn:aws:kms:us-east-1:ACCOUNT:key/$(terraform output -raw kms_key_id)"
+          ],
+          "time_minutes": 5,
+          "requires_approval": false,
+          "requires_execution": true,
+          "expected_result": "ALLOWED"
+        },
+        {
+          "step": 3,
+          "title": "Test Operator encrypt+decrypt permissions",
+          "description": "Simular que Operator role puede hacer kms:Encrypt Y kms:Decrypt (no debería tener otros permisos)",
+          "commands": [
+            "aws iam simulate-principal-policy \\",
+            "  --policy-source-arn arn:aws:iam::ACCOUNT:role/operators-sso-role \\",
+            "  --action-names kms:Encrypt kms:Decrypt kms:GenerateDataKey \\",
+            "  --resource-arns arn:aws:kms:us-east-1:ACCOUNT:key/$(terraform output -raw kms_key_id)"
+          ],
+          "time_minutes": 5,
+          "requires_approval": false,
+          "requires_execution": true,
+          "expected_result": "ALLOWED (for Encrypt/Decrypt/GenerateDataKey), DENIED (for others)"
+        },
+        {
+          "step": 4,
+          "title": "Test that no unexpected permissions exist",
+          "description": "Verificar que otros roles NO pueden usar kms:ScheduleKeyDeletion o kms:DisableKey (operaciones destructivas)",
+          "commands": [
+            "aws iam simulate-principal-policy \\",
+            "  --policy-source-arn arn:aws:iam::ACCOUNT:role/k3s-flux-cd-role \\",
+            "  --action-names kms:ScheduleKeyDeletion kms:DisableKey \\",
+            "  --resource-arns arn:aws:kms:us-east-1:ACCOUNT:key/KEY_ID"
+          ],
+          "time_minutes": 3,
+          "requires_approval": false,
+          "requires_execution": true,
+          "expected_result": "DENIED"
+        },
+        {
+          "step": 5,
+          "title": "Document findings",
+          "description": "Crear comentario en PR con resultados de validación. Formato: ✅ Permission X: ALLOWED (expected), ✅ Permission Y: DENIED (expected)",
+          "commands": [],
+          "time_minutes": 3,
+          "requires_approval": false,
+          "requires_execution": true,
+          "example_comment": "✅ KMS Policy Review Complete\n\n✅ Flux CD - kms:Decrypt: ALLOWED (expected)\n✅ Operator - kms:Encrypt: ALLOWED (expected)\n✅ Operator - kms:Decrypt: ALLOWED (expected)\n✅ All roles - kms:ScheduleKeyDeletion: DENIED (expected)\n\nPolicy follows least privilege principle. Approved for merge."
+        }
+      ],
+      
+      "execution_details": {
+        "agent_target": "security-reviewer",
+        "dependencies": [],
+        "blocks": ["merge"],
+        "can_parallelize_with": ["solution-2"],
+        "estimated_total_minutes": 20,
+        "is_blocker": true
+      }
+    },
+
+    {
+      "id": "solution-2",
+      "linked_to": "next-step-2",
+      "problem": "Verify Terraform plan shows expected resources",
+      "severity": "MEDIUM",
+      "priority": "IMMEDIATE",
+      "why_important": "Validar terraform plan antes de apply previene sorpresas. Detecta typos, errores de sintaxis, y documenta exactamente qué se va a crear. Es la última línea de defensa antes de apply.",
+      
+      "possible_solutions": [
+        {
+          "option": "A",
+          "title": "Manual terraform plan + review",
+          "description": "Ejecutar terraform plan localmente, revisar output manualmente, buscar los recursos esperados (KMS key, alias, policies)",
+          "pros": [
+            "Simple, directo",
+            "No requiere herramientas extra",
+            "Puedes leer y entender fácilmente"
+          ],
+          "cons": [
+            "Manual, propenso a errores",
+            "No reproducible",
+            "Requiere terraform en local"
+          ],
+          "effort_minutes": 10,
+          "risk": "LOW",
+          "requires_specialist": false
+        },
+        {
+          "option": "B",
+          "title": "Automated tfplan parsing + validation",
+          "description": "Crear script que parsea terraform plan (JSON format), valida que recursos esperados existen, reporta resultado automáticamente",
+          "pros": [
+            "Reproducible",
+            "Automatizado, no olvidas",
+            "Se puede integrar en CI/CD"
+          ],
+          "cons": [
+            "Setup inicial de script",
+            "Requiere mantenimiento",
+            "Overhead para caso único"
+          ],
+          "effort_minutes": 15,
+          "risk": "LOW",
+          "requires_specialist": false
+        },
+        {
+          "option": "C",
+          "title": "CI/CD integration - automated plan validation",
+          "description": "Agregar step a GitHub Actions que ejecuta terraform plan, lo valida, y reporta resultado automáticamente en cada push/PR",
+          "pros": [
+            "Se ejecuta siempre, no olvidas",
+            "Previene futuros errores",
+            "Escalable para todo repo"
+          ],
+          "cons": [
+            "Setup más complejo",
+            "Afecta pipeline de CI/CD",
+            "Overkill para este PR"
+          ],
+          "effort_minutes": 30,
+          "risk": "MEDIUM",
+          "requires_specialist": true
+        }
+      ],
+      
+      "recommended_solution": {
+        "option": "A",
+        "reason": "Para este PR basta lo simple. Rápido, directo, sin overhead. Si se vuelve patrón (muchos Terraform PRs), entonces considerar opción C.",
+        "confidence": "HIGH"
+      },
+      
+      "implementation_steps": [
+        {
+          "step": 1,
+          "title": "Navigate to KMS module directory",
+          "description": "Cambiar a directorio donde está la configuración Terraform",
+          "commands": ["cd infra/08_kms/dev/"],
+          "time_minutes": 1,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 2,
+          "title": "Run terraform plan and save output",
+          "description": "Ejecutar terraform plan sin colores (para facilitar parsing), guardar en archivo para referencia",
+          "commands": [
+            "terraform plan -no-color > /tmp/tfplan.txt",
+            "# Or using json format (better for automated parsing):",
+            "terraform plan -json > /tmp/tfplan.json"
+          ],
+          "time_minutes": 3,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 3,
+          "title": "Validate expected resources are present",
+          "description": "Buscar en el plan que existen todos los recursos esperados",
+          "commands": [
+            "# Check for expected resources in plan output:",
+            "grep 'aws_kms_key.sops' /tmp/tfplan.txt",
+            "grep 'aws_kms_alias.sops_dev' /tmp/tfplan.txt",
+            "grep 'aws_iam_role_policy.flux_decrypt' /tmp/tfplan.txt",
+            "grep 'aws_iam_role_policy.operator_kms' /tmp/tfplan.txt",
+            "",
+            "# If using JSON format:",
+            "cat /tmp/tfplan.json | jq '.resource_changes[] | select(.type==\"aws_kms_key\") | .address'"
+          ],
+          "time_minutes": 3,
+          "requires_approval": false,
+          "requires_execution": true,
+          "expected_result": "Todo debe salir en grep sin errores"
+        },
+        {
+          "step": 4,
+          "title": "Check for unexpected deletions/modifications",
+          "description": "Verificar que no hay cambios inesperados en otros recursos. Debería solo ver ADDITIONS, no DELETIONS",
+          "commands": [
+            "# Should only see 'will be created'",
+            "grep -i 'will be.*destroyed' /tmp/tfplan.txt",
+            "# If this returns anything, review carefully"
+          ],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": true,
+          "expected_result": "No output (ningún recurso debería ser destructed)"
+        },
+        {
+          "step": 5,
+          "title": "Document validation result in PR",
+          "description": "Comentar en PR que terraform plan ha sido validado exitosamente",
+          "commands": [],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": true,
+          "example_comment": "✅ Terraform Plan Validated\n\nAll expected resources verified:\n- ✅ aws_kms_key.sops\n- ✅ aws_kms_alias.sops_dev\n- ✅ aws_iam_role_policy.flux_decrypt\n- ✅ aws_iam_role_policy.operator_kms\n\nNo unexpected deletions detected. Plan is safe."
+        }
+      ],
+      
+      "execution_details": {
+        "agent_target": "terraform-validator",
+        "dependencies": [],
+        "blocks": [],
+        "can_parallelize_with": ["solution-1"],
+        "estimated_total_minutes": 9,
+        "is_blocker": false
+      }
+    },
+
+    {
+      "id": "solution-3",
+      "linked_to": "next-step-3",
+      "problem": "Integration test: Flux CD can decrypt with new KMS key",
+      "severity": "MEDIUM",
+      "priority": "BEFORE_MERGE",
+      "why_important": "Validar que infraestructura (KMS) + aplicación (Flux CD) se conectan correctamente. De nada sirve infraestructura hermosa si no funciona con la app. Es el test del happy-path.",
+      
+      "recommended_solution": {
+        "option": "E2E_TEST",
+        "reason": "Test end-to-end en dev environment: crear secret SOPS encrypted → Flux CD descifra automáticamente → verificar en cluster",
+        "confidence": "HIGH"
+      },
+      
+      "implementation_steps": [
+        {
+          "step": 1,
+          "title": "Create test secret file",
+          "description": "Crear un archivo YAML simple con un secreto de prueba",
+          "commands": [
+            "cat > /tmp/test-secret.yaml <<'EOF'\napiVersion: v1\nkind: Secret\nmetadata:\n  name: kms-test-secret\n  namespace: default\ntype: Opaque\nstringData:\n  password: \"my-secret-password-12345\"\n  api-key: \"sk-1234567890abcdef\"\nEOF"
+          ],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 2,
+          "title": "Encrypt secret with SOPS using new KMS key",
+          "description": "Usar SOPS para encriptar con la clave KMS que acabamos de crear",
+          "commands": [
+            "# Get KMS key from terraform output",
+            "KMS_KEY=$(cd infra/08_kms/dev && terraform output -raw kms_key_id)",
+            "",
+            "# Encrypt with SOPS",
+            "sops --encrypt --kms arn:aws:kms:us-east-1:$ACCOUNT_ID:key/$KMS_KEY \\",
+            "  /tmp/test-secret.yaml > /tmp/test-secret.sops.yaml"
+          ],
+          "time_minutes": 3,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 3,
+          "title": "Commit encrypted secret to Git",
+          "description": "Agregar el secreto encriptado al repositorio para que Flux CD lo vea",
+          "commands": [
+            "cp /tmp/test-secret.sops.yaml ./applications/kms-test/secret.sops.yaml",
+            "git add ./applications/kms-test/secret.sops.yaml",
+            "git commit -m 'test: add KMS encrypted secret for integration testing'",
+            "git push origin feat/kms-integration-test"
+          ],
+          "time_minutes": 3,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 4,
+          "title": "Wait for Flux CD to sync and decrypt",
+          "description": "Flux CD automáticamente verá el cambio, descargará el archivo, lo descifrará con KMS, y creará el secret en cluster",
+          "commands": [
+            "# Watch Flux CD reconciliation",
+            "flux logs --all-namespaces --follow",
+            "",
+            "# Or check manually",
+            "kubectl get secret kms-test-secret -n default"
+          ],
+          "time_minutes": 5,
+          "requires_approval": false,
+          "requires_execution": true,
+          "expected_result": "Secret debe existir en cluster con datos desencriptados"
+        },
+        {
+          "step": 5,
+          "title": "Verify secret was decrypted correctly",
+          "description": "Confirmar que el secreto en cluster tiene los valores originales (no encriptados)",
+          "commands": [
+            "# Get secret value",
+            "kubectl get secret kms-test-secret -n default -o jsonpath='{.data.password}' | base64 -d",
+            "# Should output: my-secret-password-12345",
+            "",
+            "# Verify all keys are present",
+            "kubectl get secret kms-test-secret -n default -o jsonpath='{.data}' | jq keys"
+          ],
+          "time_minutes": 3,
+          "requires_approval": false,
+          "requires_execution": true,
+          "expected_result": "Valores coinciden con original (not base64)"
+        },
+        {
+          "step": 6,
+          "title": "Clean up test secret",
+          "description": "Remover el secreto de test del repositorio (fue solo para validación)",
+          "commands": [
+            "git rm ./applications/kms-test/secret.sops.yaml",
+            "git commit -m 'test: remove KMS integration test secret'",
+            "git push origin feat/kms-integration-test"
+          ],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 7,
+          "title": "Document test results in PR",
+          "description": "Comentar en PR que test de integración pasó",
+          "commands": [],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": true,
+          "example_comment": "✅ Integration Test Passed\n\nFlux CD successfully:\n1. Detected encrypted secret in repo\n2. Called KMS to decrypt\n3. Created secret in cluster\n4. Values match original (not encrypted)\n\nKMS + Flux CD integration working correctly."
+        }
+      ],
+      
+      "execution_details": {
+        "agent_target": "qa-engineer",
+        "dependencies": ["solution-1", "solution-2"],
+        "blocks": ["merge"],
+        "can_parallelize_with": [],
+        "estimated_total_minutes": 20,
+        "is_blocker": true,
+        "requires_dev_environment": true
+      }
+    },
+
+    {
+      "id": "solution-4",
+      "linked_to": "next-step-4",
+      "problem": "Document KMS key rotation strategy",
+      "severity": "LOW",
+      "priority": "BEFORE_MERGE",
+      "why_important": "Aunque Terraform configura auto-rotation automáticamente, el equipo necesita saber: cómo verificar que ocurrió, qué hacer si falla, impacto en SOPS. Un simple README es suficiente.",
+      
+      "recommended_solution": {
+        "option": "README_DOCUMENTATION",
+        "reason": "Crear o actualizar README.md en infra/08_kms/dev/ con sección de rotation strategy. Simple, mantenible, colocalizado con código.",
+        "confidence": "HIGH"
+      },
+      
+      "implementation_steps": [
+        {
+          "step": 1,
+          "title": "Create or edit README.md in KMS module",
+          "description": "Editar infra/08_kms/dev/README.md (crear si no existe)",
+          "commands": [
+            "cat > infra/08_kms/dev/README.md <<'EOF'\n# KMS Module for SOPS (DEV)\n\nThis module manages AWS KMS keys used for encrypting secrets with SOPS.\n\n## Overview\n- Key alias: `alias/sops-dev`\n- Auto-rotation: **Enabled** (annual)\n- Deletion window: 30 days\n- Managed by: Terraform\n\n## Key Rotation\n\n### Configuration\n- **Auto-rotation enabled:** Yes\n- **Rotation period:** 1 year (365 days)\n- **Management:** AWS KMS service (automatic)\n\n### How to verify rotation occurred\n```bash\n# Check if auto-rotation is enabled\naws kms describe-key --key-id alias/sops-dev \\\n  --query 'KeyMetadata.KeyRotationEnabled'\n# Output should be: true\n\n# View rotation history\naws kms list-key-rotations --key-id alias/sops-dev\n\n# View last rotation date\naws kms describe-key --key-id alias/sops-dev \\\n  --query 'KeyMetadata.{CreationDate: CreationDate, Description: Description}'\n```\n\n### If rotation fails\n1. **Check CloudWatch logs:**\n   ```bash\n   aws logs filter-log-events \\\n     --log-group-name '/aws/kms/rotation' \\\n     --start-time $(date -d '24 hours ago' +%s)000\n   ```\n\n2. **Check AWS Service Health Dashboard:**\n   - Go to: https://status.aws.amazon.com/\n   - Look for KMS service incidents\n\n3. **Contact AWS Support if still failing**\n   - This is rare (AWS handles rotation)\n   - Provide: key-id, error from logs\n\n### Impact on SOPS\n- **Impact: NONE**\n- KMS transparently handles key rotation\n- SOPS continues to work without manual intervention\n- New encrypted secrets use new key version automatically\n\n## Troubleshooting\n\n### Flux CD can't decrypt secrets\n- Check: Is Flux CD role authorized to use this key?\n  ```bash\n  aws iam simulate-principal-policy \\\n    --policy-source-arn $(aws iam get-role --role-name k3s-flux-cd-role --query 'Role.Arn' --output text) \\\n    --action-names kms:Decrypt \\\n    --resource-arns arn:aws:kms:us-east-1:ACCOUNT:key/$(terraform output -raw kms_key_id)\n  ```\n- Check: Is the secret actually SOPS-encrypted with this key?\n  ```bash\n  head -1 secret.sops.yaml  # Should see: sops:\n  ```\n\n### SOPS encrypt fails\n- Error: \"KMS key not found\"\n  - Solution: Check key exists: `aws kms describe-key --key-id alias/sops-dev`\n  - Solution: Check AWS credentials are valid\n\n## References\n- [SOPS Documentation](https://github.com/mozilla/sops)\n- [AWS KMS Documentation](https://docs.aws.amazon.com/kms/)\n- [Flux CD Secret Management](https://fluxcd.io/docs/security/)\nEOF"
+          ],
+          "time_minutes": 8,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 2,
+          "title": "Add rotation monitoring consideration",
+          "description": "Opcionalmente, agregar nota sobre cómo monitorear rotación en futuro (CloudWatch alarm, Slack notification, etc.)",
+          "commands": [],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": false,
+          "note": "Este paso es OPCIONAL. El README ya está completo sin esto."
+        },
+        {
+          "step": 3,
+          "title": "Commit documentation",
+          "description": "Agregar README al repositorio",
+          "commands": [
+            "git add infra/08_kms/dev/README.md",
+            "git commit -m 'docs: add KMS rotation strategy documentation'",
+            "git push origin feat/kms-documentation"
+          ],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": true
+        }
+      ],
+      
+      "execution_details": {
+        "agent_target": "documentation-writer",
+        "dependencies": ["solution-1", "solution-2"],
+        "blocks": [],
+        "can_parallelize_with": ["solution-3"],
+        "estimated_total_minutes": 10,
+        "is_blocker": false
+      }
+    },
+
+    {
+      "id": "solution-5",
+      "linked_to": "next-step-5",
+      "problem": "Update team wiki with KMS setup details",
+      "severity": "LOW",
+      "priority": "AFTER_MERGE",
+      "why_important": "Después de merge y validación exitosa, el equipo necesita saber cómo usar KMS + SOPS en el día a día. Onboarding, troubleshooting, best practices. Centralizando en wiki evita preguntas repetidas.",
+      
+      "recommended_solution": {
+        "option": "WIKI_PAGE",
+        "reason": "Crear wiki page (Confluence, GitHub Wiki, o similar) con how-tos, troubleshooting, referencias. Centralizado y fácil de actualizar.",
+        "confidence": "HIGH"
+      },
+      
+      "implementation_steps": [
+        {
+          "step": 1,
+          "title": "Create wiki page structure",
+          "description": "Crear nueva página en wiki del equipo con secciones principales",
+          "sections": [
+            "Overview - ¿Qué es KMS? ¿Qué es SOPS? ¿Cómo se usan juntos?",
+            "How-Tos - Crear secreto, Editar secreto, Rotar secreto",
+            "Troubleshooting - Problemas comunes y soluciones",
+            "References - Links a docs externas",
+            "Team contacts - A quién contactar si algo falla"
+          ],
+          "time_minutes": 5,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 2,
+          "title": "Write Overview section",
+          "description": "Explicar qué es KMS, SOPS, y cómo se integran",
+          "content": "KMS = AWS Key Management Service (encriptación en AWS). SOPS = Secrets Operations (herramienta para cifrar archivos de config). Juntos: archivos de secretos en Git, encriptados con KMS, desencriptados automáticamente por Flux CD.",
+          "time_minutes": 5,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 3,
+          "title": "Write How-To: Create a secret",
+          "description": "Paso a paso para crear un secreto nuevo",
+          "content": "1. Create file: secret.yaml with Secret manifests. 2. Encrypt: sops --encrypt secret.yaml. 3. Commit: git add secret.sops.yaml. 4. Push. 5. Flux CD automáticamente descifra.",
+          "time_minutes": 5,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 4,
+          "title": "Write How-To: Edit existing secret",
+          "description": "Cómo editar un secreto ya encriptado",
+          "content": "1. Open with SOPS: sops secret.sops.yaml. 2. Editar en editor. 3. Save. SOPS re-encripta automáticamente. 4. Commit y push.",
+          "time_minutes": 3,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 5,
+          "title": "Write Troubleshooting section",
+          "description": "Problemas comunes y soluciones",
+          "problems": [
+            "Q: Flux CD no puede descifrar\nA: Check if role has kms:Decrypt permission",
+            "Q: SOPS encrypt falla\nA: Check AWS credentials, check KMS key exists",
+            "Q: Secret values están en base64 pero encriptados\nA: SOPS needs to be configured, check .sops.yaml"
+          ],
+          "time_minutes": 5,
+          "requires_approval": false,
+          "requires_execution": true
+        },
+        {
+          "step": 6,
+          "title": "Add references and team contacts",
+          "description": "Links a documentación externa + contactos del equipo",
+          "links": [
+            "SOPS docs: https://github.com/mozilla/sops",
+            "AWS KMS docs: https://docs.aws.amazon.com/kms/",
+            "Flux CD secrets: https://fluxcd.io/docs/security/",
+            "Team contact: #dev-infra channel on Slack"
+          ],
+          "time_minutes": 2,
+          "requires_approval": false,
+          "requires_execution": true
+        }
+      ],
+      
+      "execution_details": {
+        "agent_target": "documentation-writer",
+        "dependencies": ["merge", "solution-3"],
+        "blocks": [],
+        "can_parallelize_with": [],
+        "estimated_total_minutes": 30,
+        "is_blocker": false,
+        "timing": "AFTER_MERGE"
+      }
+    }
+  ],
+
+  "execution_plan": {
+    "phase_1_day_1_immediate": {
+      "title": "Security & Validation (Day 1 - PARALLELIZABLE)",
+      "solutions": ["solution-1", "solution-2"],
+      "description": "Validar seguridad y terraform en paralelo. No hay dependencias entre ellas.",
+      "can_parallelize": true,
+      "total_effort_minutes": 20,
+      "critical_path_minutes": 20,
+      "expected_outcome": "✅ Security review passed, ✅ Terraform plan validated"
+    },
+
+    "phase_2_day_2_before_merge": {
+      "title": "Integration & Documentation (Day 2 - SEQUENTIAL)",
+      "solutions": ["solution-3", "solution-4"],
+      "description": "Solution 3 es bloqueador (test integración). Solution 4 puede ir en paralelo.",
+      "can_parallelize": false,
+      "total_effort_minutes": 30,
+      "critical_path_minutes": 20,
+      "dependencies": ["solution-1", "solution-2"],
+      "expected_outcome": "✅ Flux CD can decrypt, ✅ Rotation strategy documented"
+    },
+
+    "phase_3_after_merge": {
+      "title": "Knowledge Base (Day 3+ - POST-MERGE)",
+      "solutions": ["solution-5"],
+      "description": "Después de merge y validación exitosa en dev environment, actualizar wiki del equipo",
+      "can_parallelize": true,
+      "total_effort_minutes": 30,
+      "critical_path_minutes": 30,
+      "dependencies": ["merge", "solution-3"],
+      "expected_outcome": "✅ Team wiki updated, ✅ Knowledge base ready"
+    }
+  },
+
+  "timeline": {
+    "day_1": {
+      "phase": "Immediate - Security & Validation",
+      "parallelizable_solutions": [
+        {
+          "solution": "solution-1",
+          "effort": "20 min",
+          "description": "KMS policy review with IAM Policy Simulator"
+        },
+        {
+          "solution": "solution-2",
+          "effort": "9 min",
+          "description": "Terraform plan verification"
+        }
+      ],
+      "total_day_1": "~20 minutes (if parallelized)"
+    },
+
+    "day_2": {
+      "phase": "Before Merge - Integration & Docs",
+      "sequential": [
+        {
+          "solution": "solution-3",
+          "effort": "20 min",
+          "description": "Flux CD integration test",
+          "note": "Bloqueador - debe pasar antes de merge"
+        }
+      ],
+      "parallel_with_solution_3": [
+        {
+          "solution": "solution-4",
+          "effort": "10 min",
+          "description": "Document rotation strategy"
+        }
+      ],
+      "total_day_2": "~30 minutes"
+    },
+
+    "day_3_plus": {
+      "phase": "After Merge - Knowledge Base",
+      "solutions": [
+        {
+          "solution": "solution-5",
+          "effort": "30 min",
+          "description": "Update team wiki",
+          "timing": "POST-MERGE (can do when there's time)"
+        }
+      ]
+    }
+  },
+
+  "summary": {
+    "total_solutions": 5,
+    "total_effort_minutes": 89,
+    "critical_path_minutes": 40,
+    "blocker_count": 2,
+    "parallelizable_solutions": 3,
+    "recommended_timeline": "2-3 days",
+    "agents_involved": [
+      "security-reviewer",
+      "terraform-validator",
+      "qa-engineer",
+      "documentation-writer"
+    ]
+  },
+
+  "important_notes": {
+    "no_execution": "❌ This agent PROPOSES solutions. It NEVER executes anything without explicit approval.",
+    "approval_required": "✅ To execute any step, contact the corresponding agent with: 'Please execute [solution N, step X]'",
+    "modification_allowed": "✅ You can modify proposed solutions before execution",
+    "blocking_note": "⚠️ Solutions 1 and 3 are blockers - must pass before merge"
+  }
+}

@@ -1,0 +1,37 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: erpsl-pg-restore
+  namespace: erpsl
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4
+  
+  storage:
+    size: 10Gi
+    storageClass: local-path
+
+  bootstrap:
+    recovery:
+      source: erpsl-pg
+      recoveryTarget:
+        targetTime: "2026-04-17 10:00:00"
+
+  externalClusters:
+    - name: erpsl-pg
+      barmanObjectStore:
+        destinationPath: "s3://southernlights-k3s-dev/backups/erpsl-pg/"
+        endpointURL: "https://s3.us-east-1.amazonaws.com"
+        s3Credentials:
+          inheritFromIAMRole: true
+        wal:
+          compression: gzip
+          encryption: AES256
+
+  backup:
+    retentionPolicy: "30d"
+    barmanObjectStore:
+      destinationPath: "s3://southernlights-k3s-dev/backups/erpsl-pg-restore/"
+      endpointURL: "https://s3.us-east-1.amazonaws.com"
+      s3Credentials:
+        inheritFromIAMRole: true

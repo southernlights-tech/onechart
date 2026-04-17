@@ -1,0 +1,54 @@
+📝 ANÁLISIS DE CAMBIOS
+
+Archivo: infra/08_kms/dev/main.tf (línea 76-88)
+Cambio 1: Política IAM - Statement 4 (Attachers)
+
+Diff:
+```diff
+- Statement = [
+-   {...},
+-   {...},
+-   {...},
+-   length(var.attachers_principals) > 0 ? {...} : null
+- ]
++ dynamic "statement" {
++   for_each = length(var.attachers_principals) > 0 ? [1] : []
++   content {
++     Sid = "Allow attachment..."
++     ...
++   }
++ }
+```
+
+Explicación: "Se reemplaza un operador ternario que retorna null con un bloque
+dinámico (dynamic block). La razón es que jsonencode() no puede serializar null
+dentro de un array de statements. El bloque dinámico solo crea el statement si
+attachers_principals no está vacío, lo que es más limpio y correcto."
+
+Por qué cambió: Es un bug fix crítico. El código anterior fallaría en Terraform
+Impacto: CRÍTICO - Sin este cambio, terraform apply falla
+Severidad: CRÍTICO
+
+---
+
+Archivo: infra/08_kms/dev/README.md (línea 1-50)
+Cambio 2: Documentación mejorada
+
+Diff:
+```diff
+- # KMS Key Module
++ # AWS KMS Key Management Module
++ 
++ Módulo Terraform reutilizable para crear y gestionar claves KMS de AWS con
++ configuración multi-ambiente (dev/staging/prod) y políticas IAM granulares.
+```
+
+Explicación: "Se agrega documentación comprensiva en español con descripción de
+propósito, parámetros, outputs y ejemplos de uso. Esto mejora la mantenibilidad
+y facilita el onboarding de nuevos desarrolladores."
+
+Por qué cambió: Mejora de documentación
+Impacto: BAJO - Solo documentación, sin cambios funcionales
+Severidad: BAJO
+
+✅ Phase 3 completada en ESPAÑOL.
