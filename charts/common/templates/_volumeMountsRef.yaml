@@ -1,11 +1,16 @@
 {{- define "common.volumeMountsRef.tpl" -}}
 {{- if or (or (or (.Values.secrets.secretManager) (.Values.volumes) (.Values.sealedFileSecrets)) .Values.fileSecrets) .Values.existingFileSecrets -}}
 volumeMounts:
-{{- if .Values.secrets.secretManager }}
-  - name: {{ template "common.robustName" .Release.Name }}-csi
-    mountPath: {{ .Values.secrets.secretManager.csi.path }}
+  {{- $secretManagerItems := include "common.secretManagerItems" . -}}
+  {{- if and $secretManagerItems (ne $secretManagerItems "[]") -}}
+  {{- $data := fromJson (printf "{\"items\": %s}" $secretManagerItems) -}}
+  {{- range $item := $data.items }}
+  - name: {{ index $item "volumeName" }}
+    mountPath: {{ index $item "mountPath" }}
     readOnly: true
-{{- end }}
+  {{- end }}
+  {{- end }}
+
 {{- range .Values.volumes }}
 {{- if not (hasPrefix "init-" .name) }}
   - name: {{ .name }}
@@ -13,14 +18,14 @@ volumeMounts:
     {{- if .subPath }}
     subPath: {{ .subPath }}
     {{- end }}
-{{- end }}    
-{{- end }}    
+{{- end }}
+{{- end }}
 {{- range .Values.sealedFileSecrets }}
   - name: {{ .name }}
     mountPath: {{ .path }}
     {{- if .subPath}}
     subPath: {{ .subPath }}
-    {{- end }} 
+    {{- end }}
     readOnly: true
 {{- end }}
 {{- range .Values.fileSecrets }}
@@ -28,7 +33,7 @@ volumeMounts:
     mountPath: {{ .path }}
     {{- if .subPath}}
     subPath: {{ .subPath }}
-    {{- end }} 
+    {{- end }}
     readOnly: true
 {{- end }}
 {{- range .Values.existingFileSecrets }}
@@ -36,7 +41,7 @@ volumeMounts:
     mountPath: {{ .path }}
     {{- if .subPath}}
     subPath: {{ .subPath }}
-    {{- end }} 
+    {{- end }}
     readOnly: true
 {{- end }}
 {{- end }}

@@ -14,7 +14,7 @@ tests:
     set:
       ingress:
         host: chart-example.local
-        paths: 
+        paths:
           - path: /mypath
           - path: /mypath2
     asserts:

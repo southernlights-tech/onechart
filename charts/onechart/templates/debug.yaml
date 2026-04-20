@@ -1,0 +1,4 @@
+{{- $secretManagerItems := include "common.secretManagerItems" . -}}
+{{- $data := fromJson (printf "{\"items\": %s}" $secretManagerItems) -}}
+# TYPE: {{ typeOf $data }}
+# TYPE ITEMS: {{ typeOf $data.items }}

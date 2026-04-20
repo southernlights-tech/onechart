@@ -41,4 +41,4 @@ tests:
                 optional: true
             - configMapRef:
                 name: secondcm
-                optional: true        
+                optional: true

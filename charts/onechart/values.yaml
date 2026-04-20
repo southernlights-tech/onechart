@@ -27,6 +27,7 @@ strategy:
     maxUnavailable: 0
 
 nameOverride: ""
+releaseNameOverride: ""
 fullnameOverride: ""
 
 podAnnotations: {}
@@ -74,8 +75,6 @@ livenessProbe:
     timeoutSeconds: 3
     failureThreshold: 3
 
-secretEnabled: false
-
 shell: "/bin/sh"
 
 podDisruptionBudgetEnabled: true
@@ -105,21 +104,30 @@ monitor:
 container: {}
 podSpec: {}
 
+# existingConfigMaps:
+#   - name: my-config-map
+#
+# existingSecrets:
+#   - name: my-secret
+
 secrets:
   secretManager: {}
   # Example configuration for AWS Secrets Manager:
-  # secretManager:
-  #   name: "my-secret-name"
-  #   keys:
-  #     - "SECRET_KEY_1"
-  #     - "SECRET_KEY_2"
-  #   # Optional: Remap secret keys to different environment variable names
-  #   keyMappings:
-  #     SECRET_KEY_1: "ENV_VAR_1"   # Maps SECRET_KEY_1 -> ENV_VAR_1
-  #     SECRET_KEY_2: "ENV_VAR_2"   # Maps SECRET_KEY_2 -> ENV_VAR_2
-  #   csi:
-  #     name: "secrets-store"
-  #     path: "/mnt/secrets-store"
+  # items:
+  #   - name: "my-secret-name"
+  #     keys:
+  #       - "SECRET_KEY_1"
+  #       - "SECRET_KEY_2"
+  #     # Optional: Remap secret keys to different environment variable names
+  #     keyMappings:
+  #       SECRET_KEY_1: "ENV_VAR_1"
+  #       SECRET_KEY_2: "ENV_VAR_2"
+  #   - name: "another-secret"
+  #     keys:
+  #       - "API_KEY"
+  # csi:
+  #   name: "secrets-store"
+  #   path: "/mnt/secrets-store"
 
 serviceAccountCreate: {}
 
@@ -141,37 +149,3 @@ autoscaling:
         periodSeconds: 15
   # cpuAverageUtilization: percentage of the requested value of the resource for the pods.
   # memoryAverageUtilization: percentage of the requested value of the resource for the pods.
-
-# Kong plugin configurations
-kong:
-  plugins: {}
-    # Example CORS plugin using response-transformer
-    # cors:
-    #   enabled: false
-    #   plugin: response-transformer
-    #   config:
-    #     append:
-    #       headers:
-    #         - "access-control-allow-origin:https://example.com"
-    #         - "access-control-allow-credentials:true"
-    
-    # Example rate limiting plugin
-    # rate-limit:
-    #   enabled: false
-    #   plugin: rate-limiting
-    #   config:
-    #     minute: 100
-    #     hour: 1000
-    #     policy: local
-    
-    # Example request transformer plugin
-    # request-transformer:
-    #   enabled: false
-    #   plugin: request-transformer
-    #   config:
-    #     add:
-    #       headers:
-    #         - "X-Custom-Header:custom-value"
-    #     remove:
-    #       headers:
-    #         - "X-Remove-Header"
