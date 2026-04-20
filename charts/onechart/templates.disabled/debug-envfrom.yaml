@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debug-envfrom
+data:
+  output: |
+{{- include "common.envFromRef.tpl" . | indent 4 }}

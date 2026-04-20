@@ -5,12 +5,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "common.robustName" (printf "%s-%s" $.Release.Name .name) }}
+  name: {{ template "common.robustName" (printf "%s-%s" (include "common.releaseNameOverride" $) .name) }}
   namespace: {{ $.Release.Namespace }}
 data:
   {{ .fileName }}: |
     {{- .fileContent | nindent 4 }}
 
-  {{- end }}  
+  {{- end }}
 {{- end }}
 {{- end -}}
