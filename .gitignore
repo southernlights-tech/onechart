@@ -1,0 +1,42 @@
+# Personal context (NEVER commit)
+AGENTS.md
+.opencode/
+agent/
+
+# Scratchpad
+drafts
+draft.md
+notes.md
+
+# Secrets
+*.env
+*.secret
+*.key
+*.pem
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
