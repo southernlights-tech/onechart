@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "robustName" (.Values.releaseNameOverride | default .Release.Name) }}
+  name: {{ template "robustName" .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "helm-chart.labels" . | nindent 4 }}
@@ -56,18 +56,11 @@ metadata:
   {{- end }}
 spec:
   type: {{ if .Values.nodePortEnabled }}NodePort{{ else if .Values.loadbalancerEnabled }}LoadBalancer{{ else }}ClusterIP{{ end }}
-  {{- if or .Values.stickySessions (and .Values.sessionAffinity .Values.sessionAffinity.enabled) }}
-  sessionAffinity: {{ if and .Values.sessionAffinity .Values.sessionAffinity.type }}{{ .Values.sessionAffinity.type }}{{ else }}ClientIP{{ end }}
-  {{- if or (eq (and .Values.sessionAffinity .Values.sessionAffinity.type | default "ClientIP") "ClientIP") .Values.stickySessions }}
+  {{- if .Values.stickySessions }}
   sessionAffinityConfig:
     clientIP:
-      timeoutSeconds: {{ if and .Values.sessionAffinity .Values.sessionAffinity.config .Values.sessionAffinity.config.clientIP .Values.sessionAffinity.config.clientIP.timeoutSeconds }}{{ .Values.sessionAffinity.config.clientIP.timeoutSeconds }}{{ else }}10800{{ end }}
-  {{- end }}
-  {{- end }}
-  {{- if and .Values.stickySessions (or .Values.nodePortEnabled .Values.loadbalancerEnabled) }}
+      timeoutSeconds: 10800
   externalTrafficPolicy: Local
-  {{- else if and .Values.service .Values.service.externalTrafficPolicy (or .Values.nodePortEnabled .Values.loadbalancerEnabled) }}
-  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
   {{- end }}
   ports:
     {{- if not .Values.ports }}

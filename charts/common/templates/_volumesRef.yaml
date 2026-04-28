@@ -1,17 +1,13 @@
 {{- define "common.volumesRef.tpl" }}
 {{- if or (or (or (.Values.secrets.secretManager) (.Values.volumes) (.Values.sealedFileSecrets)) .Values.fileSecrets) .Values.existingFileSecrets }}
 volumes:
-  {{- $secretManagerItems := include "common.secretManagerItems" . -}}
-  {{- if and $secretManagerItems (ne $secretManagerItems "[]") -}}
-  {{- $data := fromJson (printf "{\"items\": %s}" $secretManagerItems) -}}
-  {{- range $item := $data.items }}
-  - name: {{ index $item "volumeName" }}
+  {{- if .Values.secrets.secretManager }}
+  - name: {{ template "common.robustName" .Release.Name }}-csi
     csi:
       driver: secrets-store.csi.k8s.io
       readOnly: true
       volumeAttributes:
-        secretProviderClass: {{ index $item "volumeName" }}
-  {{- end }}
+        secretProviderClass: {{ template "common.robustName" .Release.Name }}-csi
   {{- end }}
   {{- range .Values.volumes }}
   - name: {{ .name }}
@@ -25,7 +21,7 @@ volumes:
       secretName: {{ .existingSecret }}
     {{- else if .fileName }}
     configMap:
-      name: {{ template "common.robustName" (printf "%s-%s" (include "common.releaseNameOverride" $) .name) }}
+      name: {{ template "common.robustName" (printf "%s-%s" $.Release.Name .name) }}
     {{- else if .hostPath }}
     hostPath:
       path: {{ .hostPath.path }}
@@ -37,19 +33,19 @@ volumes:
       {{- if .existingClaim }}
       claimName: {{ .existingClaim }}
       {{ else }}
-      claimName: {{ printf "%s-%s" (include "common.releaseNameOverride" $) .name }}
+      claimName: {{ printf "%s-%s" $.Release.Name .name }}
       {{- end }}
       {{- end }}
-{{- end }}
+{{- end }}     
   {{- range .Values.sealedFileSecrets }}
   - name: {{ .name }}
     secret:
-      secretName: {{ printf "%s-%s" (include "common.releaseNameOverride" $) .name }}
+      secretName: {{ printf "%s-%s" $.Release.Name .name }}
   {{- end }}
   {{- range .Values.fileSecrets }}
   - name: {{ .name }}
     secret:
-      secretName: {{ printf "%s-%s" (include "common.releaseNameOverride" $) .name }}
+      secretName: {{ printf "%s-%s" $.Release.Name .name }}
   {{- end }}
   {{- range .Values.existingFileSecrets }}
   - name: {{ .name }}

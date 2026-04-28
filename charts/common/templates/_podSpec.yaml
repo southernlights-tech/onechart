@@ -1,7 +1,7 @@
 {{- define "common.podSpec.tpl" -}}
 {{- with .Values.imagePullSecrets }}
 imagePullSecrets:
-  {{- range . }}
+  {{- range . }}  
   - name: {{ . }}
   {{- end }}
 {{- end }}
@@ -11,7 +11,7 @@ securityContext:
 serviceAccountName: {{ .Values.serviceAccount }}
 {{- end }}
 initContainers:
-  {{- range .Values.initContainers }}
+  {{- range .Values.initContainers }}  
   - name:  {{ .name }}
     image: "{{ .image }}:{{ .tag }}"
     imagePullPolicy: {{ .imagePullPolicy | default "IfNotPresent" }}
@@ -20,36 +20,20 @@ initContainers:
     command:
       - {{ $.Values.shell }}
       - -c
-      - {{ .command | quote}}
+      - {{ .command | quote}} 
     {{- end }}
-    {{- $mounts := list -}}
-    {{- range $.Values.volumes }}
-    {{- if (or (hasPrefix "shared-" .name) (hasPrefix "init-" .name))}}
-    {{- $mounts = append $mounts (dict "mountPath" .path "name" .name) }}
-    {{- end }}
-    {{- end }}
-    {{- $secretManagerItems := include "common.secretManagerItems" $ -}}
-    {{- if and $secretManagerItems (ne $secretManagerItems "[]") -}}
-    {{- $data := fromJson (printf "{\"items\": %s}" $secretManagerItems) -}}
-    {{- range $item := $data.items }}
-    {{- $mounts = append $mounts (dict "mountPath" (index $item "mountPath") "name" (index $item "volumeName") "readOnly" true) }}
-    {{- end }}
-    {{- end }}
-    {{- if $mounts }}
     volumeMounts:
-    {{- range $mounts }}
-    - mountPath: {{ .mountPath }}
+    {{- range $.Values.volumes }}  
+    {{- if (or (hasPrefix "shared-" .name) (hasPrefix "init-" .name))}}
+    - mountPath: {{ .path }}
       name: {{ .name }}
-      {{- if .readOnly }}
-      readOnly: true
-      {{- end }}
     {{- end }}
     {{- end }}
     {{- if .securityContext }}
     securityContext:
     {{- toYaml .securityContext | nindent 6 }}
     {{- end}}
-  {{- end }}
+  {{- end }}      
 containers:
   {{- $containerTpl := include "common.container.tpl" . | fromYaml }}
   {{- $container := mergeOverwrite $containerTpl .Values.container }}
@@ -57,7 +41,7 @@ containers:
     {{- include "common.envFromRef.tpl" . | nindent 4 }}
     {{- include "common.volumeMountsRef.tpl" . | nindent 4 }}
   {{- if .Values.sidecar }}
-  - name: {{ template "robustName" (include "common.releaseNameOverride" .) }}-sidecar
+  - name: {{ template "robustName" .Release.Name }}-sidecar
     securityContext:
       {{- toYaml .Values.securityContext | nindent 6 }}
     image: {{ .Values.sidecar.repository }}:{{ .Values.sidecar.tag }}
@@ -69,10 +53,6 @@ containers:
     {{- end }}
     {{- include "common.envFromRef.tpl" . | nindent 4 }}
     {{- include "common.volumeMountsRef.tpl" . | nindent 4 }}
-    {{- if .Values.sidecar.resources }}
-    resources:
-      {{- toYaml .Values.sidecar.resources | nindent 6 }}
-    {{- end }}
   {{- end }}
 {{- include "common.volumesRef.tpl" . }}
 {{- with .Values.nodeSelector }}
@@ -89,7 +69,7 @@ affinity:
             - key: "app.kubernetes.io/instance"
               operator: In
               values:
-                - {{ template "robustName" (include "common.releaseNameOverride" .) }}
+                - {{ template "robustName" .Release.Name }}
         topologyKey: "kubernetes.io/hostname"
   {{- end }}
   {{- if .Values.affinity }}
@@ -99,15 +79,5 @@ affinity:
 {{- with .Values.tolerations }}
 tolerations:
   {{- toYaml . | nindent 2 }}
-{{- end }}
-{{- with .Values.dnsPolicy }}
-dnsPolicy: {{ . }}
-{{- end }}
-{{- with .Values.dnsConfig }}
-dnsConfig:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
-{{- with .Values.terminationGracePeriodSeconds }}
-terminationGracePeriodSeconds: {{ . }}
 {{- end }}
 {{- end }}
