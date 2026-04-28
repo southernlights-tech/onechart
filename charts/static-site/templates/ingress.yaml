@@ -49,3 +49,4 @@ spec:
 {{- range .Values.ingresses }}
 {{template "onechart.ingress" (dict "root" $ "ingress" . "longName" true) }}
 {{- end }}
+ 
