@@ -1,0 +1,6 @@
+{{- if .Values.debug -}}
+{{- if .Values.secrets.secretManager -}}
+# TEST OUTPUT:
+{{- include "common.secretManagerItems" . }}
+{{- end }}
+{{- end -}}
