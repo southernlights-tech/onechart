@@ -1,44 +1,63 @@
-.PHONY: all lint kubeval test package debug docs docs-serve
+.PHONY: all lint kubeval test package debug lint-onechart lint-cron-job kubeval-onechart kubeval-cron-job test-onechart test-cron-job package-onechart package-cron-job debug-onechart debug-cron-job
 
-all: lint kubeval test package docs
+all: lint kubeval test package
 
-lint:
+lint: lint-onechart lint-cron-job
+
+lint-onechart:
 	helm lint charts/onechart/
 
-kubeval:
-	rm -rf manifests && true
-	mkdir manifests
-	helm template charts/onechart --output-dir manifests
-	find manifests/ -name '*.yaml' | xargs kubeval --ignore-missing-schemas -v 1.20.0
-	find manifests/ -name '*.yaml' | xargs kubeval --ignore-missing-schemas -v 1.24.0
+lint-cron-job:
+	helm lint charts/cron-job/
 
-test:
+kubeval: kubeval-onechart kubeval-cron-job
+
+kubeval-onechart:
+	rm -rf manifests-onechart && true
+	mkdir manifests-onechart
+	helm template charts/onechart --output-dir manifests-onechart
+	find manifests-onechart/ -name '*.yaml' | xargs kubeval --ignore-missing-schemas -v 1.20.0
+	find manifests-onechart/ -name '*.yaml' | xargs kubeval --ignore-missing-schemas -v 1.24.0
+	rm -rf manifests-onechart
+
+kubeval-cron-job:
+	rm -rf manifests-cron-job && true
+	mkdir manifests-cron-job
+	helm template charts/cron-job --output-dir manifests-cron-job
+	find manifests-cron-job/ -name '*.yaml' | xargs kubeval --ignore-missing-schemas -v 1.20.0
+	find manifests-cron-job/ -name '*.yaml' | xargs kubeval --ignore-missing-schemas -v 1.24.0
+	rm -rf manifests-cron-job
+
+test: test-onechart test-cron-job
+
+test-onechart:
 	helm dependency update charts/onechart
 	helm unittest charts/onechart
 
-package:
+test-cron-job:
+	helm dependency update charts/cron-job
+	helm unittest charts/cron-job
+
+package: package-onechart package-cron-job
+
+package-onechart:
 	helm dependency update charts/onechart
 	helm package charts/onechart
 	mv onechart*.tgz docs
-	# helm repo index docs --url https://chart.onechart.dev
+	helm repo index docs
 
-debug:
+package-cron-job:
+	helm dependency update charts/cron-job
+	helm package charts/cron-job
+	mv cron-job*.tgz docs
+	helm repo index docs
+
+debug: debug-onechart
+
+debug-onechart:
 	helm dependency update charts/onechart
 	helm template my-release charts/onechart/ -f values.yaml --debug
 
-docs:
-	@echo "Setting up documentation environment..."
-	test -d .docs-venv || python3 -m venv .docs-venv
-	@echo "Installing dependencies..."
-	.docs-venv/bin/pip install -r docs/requirements.txt
-	@echo "Building documentation..."
-	nix-shell --run "source .docs-venv/bin/activate && cd docs && mkdocs build --clean"
-	@echo "Documentation built successfully!"
-
-docs-serve:
-	@echo "Setting up documentation environment..."
-	test -d .docs-venv || python3 -m venv .docs-venv
-	@echo "Installing dependencies..."
-	.docs-venv/bin/pip install -r docs/requirements.txt
-	@echo "Starting documentation server..."
-	nix-shell --run "source .docs-venv/bin/activate && cd docs && mkdocs serve"
+debug-cron-job:
+	helm dependency update charts/cron-job
+	helm template my-release charts/cron-job/ -f values-cron-job.yaml --debug

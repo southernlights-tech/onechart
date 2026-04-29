@@ -27,3 +27,36 @@ tests:
         equal:
           path: spec.template.spec.containers[1].image
           value: debian:stable-slim
+  - it: Should inject sidecar resources when specified
+    set:
+      sidecar:
+        repository: debian
+        tag: stable-slim
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+    asserts:
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[1].resources.requests.cpu
+          value: 50m
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[1].resources.requests.memory
+          value: 64Mi
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[1].resources.limits.cpu
+          value: 100m
+      - template: deployment.yaml
+        documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[1].resources.limits.memory
+          value: 128Mi
