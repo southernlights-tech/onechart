@@ -1,0 +1,43 @@
+﻿2026-04-21T20:14:16.6098976Z Current runner version: '2.333.1'
+2026-04-21T20:14:16.6179776Z ##[group]Runner Image Provisioner
+2026-04-21T20:14:16.6181149Z Hosted Compute Agent
+2026-04-21T20:14:16.6182032Z Version: 20260415.520
+2026-04-21T20:14:16.6183032Z Commit: af089020f5f67b61ccc91db6c07980876c02bf7b
+2026-04-21T20:14:16.6184444Z Build Date: 2026-04-15T18:07:08Z
+2026-04-21T20:14:16.6206057Z Worker ID: {8dff7bc9-43ce-40a6-933e-f33e8efd2d11}
+2026-04-21T20:14:16.6207308Z Azure Region: eastus2
+2026-04-21T20:14:16.6208322Z ##[endgroup]
+2026-04-21T20:14:16.6210904Z ##[group]Operating System
+2026-04-21T20:14:16.6211789Z Ubuntu
+2026-04-21T20:14:16.6212621Z 24.04.4
+2026-04-21T20:14:16.6213352Z LTS
+2026-04-21T20:14:16.6214064Z ##[endgroup]
+2026-04-21T20:14:16.6214786Z ##[group]Runner Image
+2026-04-21T20:14:16.6216253Z Image: ubuntu-24.04
+2026-04-21T20:14:16.6217085Z Version: 20260420.95.1
+2026-04-21T20:14:16.6219228Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260420.95/images/ubuntu/Ubuntu2404-Readme.md
+2026-04-21T20:14:16.6221825Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260420.95
+2026-04-21T20:14:16.6223542Z ##[endgroup]
+2026-04-21T20:14:16.6225442Z ##[group]GITHUB_TOKEN Permissions
+2026-04-21T20:14:16.6248903Z Contents: read
+2026-04-21T20:14:16.6249768Z Metadata: read
+2026-04-21T20:14:16.6250793Z PullRequests: write
+2026-04-21T20:14:16.6251742Z ##[endgroup]
+2026-04-21T20:14:16.6255215Z Secret source: Actions
+2026-04-21T20:14:16.6256680Z Prepare workflow directory
+2026-04-21T20:14:16.7127834Z Prepare all required actions
+2026-04-21T20:14:16.7272955Z Complete job name: Validation Summary
+2026-04-21T20:14:16.9114462Z ##[group]Run if [ "failure" == "failure" ]; then
+2026-04-21T20:14:16.9126434Z [36;1mif [ "failure" == "failure" ]; then[0m
+2026-04-21T20:14:16.9127634Z [36;1m  echo "❌ Terraform validation failed"[0m
+2026-04-21T20:14:16.9128785Z [36;1m  exit 1[0m
+2026-04-21T20:14:16.9131166Z [36;1melif [ "["00_init","01_network/dev","02_bastion/dev","03_ecr/dev","04_github-runner/dev","05_dns/dev","06_ssl/dev","07_k3s/dev","08_kms/dev","09_vpn/dev","modules/aws-client-vpn"]" == "[]" ]; then[0m
+2026-04-21T20:14:16.9133829Z [36;1m  echo "ℹ️ No Terraform changes detected - skipping validation"[0m
+2026-04-21T20:14:16.9135082Z [36;1melse[0m
+2026-04-21T20:14:16.9136466Z [36;1m  echo "✅ All Terraform validations passed"[0m
+2026-04-21T20:14:16.9137574Z [36;1mfi[0m
+2026-04-21T20:14:17.0421588Z shell: /usr/bin/bash -e {0}
+2026-04-21T20:14:17.0423360Z ##[endgroup]
+2026-04-21T20:14:17.1715867Z ❌ Terraform validation failed
+2026-04-21T20:14:17.1738209Z ##[error]Process completed with exit code 1.
+2026-04-21T20:14:17.1865419Z Cleaning up orphan processes

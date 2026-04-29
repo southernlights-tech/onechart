@@ -1,0 +1,330 @@
+﻿2026-04-21T20:13:48.4885438Z Current runner version: '2.333.1'
+2026-04-21T20:13:48.4912893Z ##[group]Runner Image Provisioner
+2026-04-21T20:13:48.4914191Z Hosted Compute Agent
+2026-04-21T20:13:48.4914856Z Version: 20260213.493
+2026-04-21T20:13:48.4915448Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-04-21T20:13:48.4916225Z Build Date: 2026-02-13T00:28:41Z
+2026-04-21T20:13:48.4916901Z Worker ID: {de32d3ef-e91c-426a-9c00-2c052557b8e9}
+2026-04-21T20:13:48.4917665Z Azure Region: northcentralus
+2026-04-21T20:13:48.4918240Z ##[endgroup]
+2026-04-21T20:13:48.4919805Z ##[group]Operating System
+2026-04-21T20:13:48.4920461Z Ubuntu
+2026-04-21T20:13:48.4920923Z 24.04.4
+2026-04-21T20:13:48.4921478Z LTS
+2026-04-21T20:13:48.4922252Z ##[endgroup]
+2026-04-21T20:13:48.4922818Z ##[group]Runner Image
+2026-04-21T20:13:48.4923368Z Image: ubuntu-24.04
+2026-04-21T20:13:48.4924003Z Version: 20260413.86.1
+2026-04-21T20:13:48.4925261Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+2026-04-21T20:13:48.4926748Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+2026-04-21T20:13:48.4927671Z ##[endgroup]
+2026-04-21T20:13:48.4928841Z ##[group]GITHUB_TOKEN Permissions
+2026-04-21T20:13:48.4931149Z Contents: read
+2026-04-21T20:13:48.4931726Z Metadata: read
+2026-04-21T20:13:48.4932649Z PullRequests: write
+2026-04-21T20:13:48.4933216Z ##[endgroup]
+2026-04-21T20:13:48.4935290Z Secret source: Actions
+2026-04-21T20:13:48.4936111Z Prepare workflow directory
+2026-04-21T20:13:48.5324885Z Prepare all required actions
+2026-04-21T20:13:48.5367711Z Getting action download info
+2026-04-21T20:13:48.8998125Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-04-21T20:13:49.0219317Z Download action repository 'aquasecurity/trivy-action@v0.35.0' (SHA:57a97c7e7821a5776cebc9bb87c984fa69cba8f1)
+2026-04-21T20:13:49.5534265Z Getting action download info
+2026-04-21T20:13:49.7207810Z Download action repository 'aquasecurity/setup-trivy@e6c2c5e321ed9123bda567646e2f96565e34abe1' (SHA:e6c2c5e321ed9123bda567646e2f96565e34abe1)
+2026-04-21T20:13:49.9707943Z Download action repository 'actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809' (SHA:0400d5f644dc74513175e3cd8d07132dd4860809)
+2026-04-21T20:13:50.0914111Z Getting action download info
+2026-04-21T20:13:50.2455761Z Download action repository 'actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8' (SHA:08c6903cd8c0fde910a37f88322edcfb5dd907a8)
+2026-04-21T20:13:50.3454315Z Complete job name: Security Scan (Trivy)
+2026-04-21T20:13:50.4132924Z ##[group]Run actions/checkout@v4
+2026-04-21T20:13:50.4133792Z with:
+2026-04-21T20:13:50.4134257Z   repository: southernlights-tech/infra
+2026-04-21T20:13:50.4135014Z   token: ***
+2026-04-21T20:13:50.4135443Z   ssh-strict: true
+2026-04-21T20:13:50.4135886Z   ssh-user: git
+2026-04-21T20:13:50.4136330Z   persist-credentials: true
+2026-04-21T20:13:50.4136820Z   clean: true
+2026-04-21T20:13:50.4137269Z   sparse-checkout-cone-mode: true
+2026-04-21T20:13:50.4137820Z   fetch-depth: 1
+2026-04-21T20:13:50.4138244Z   fetch-tags: false
+2026-04-21T20:13:50.4138689Z   show-progress: true
+2026-04-21T20:13:50.4139127Z   lfs: false
+2026-04-21T20:13:50.4139522Z   submodules: false
+2026-04-21T20:13:50.4139969Z   set-safe-directory: true
+2026-04-21T20:13:50.4140608Z ##[endgroup]
+2026-04-21T20:13:50.5468028Z Syncing repository: southernlights-tech/infra
+2026-04-21T20:13:50.5471289Z ##[group]Getting Git version info
+2026-04-21T20:13:50.5473761Z Working directory is '/home/runner/work/infra/infra'
+2026-04-21T20:13:50.5475719Z [command]/usr/bin/git version
+2026-04-21T20:13:50.5570151Z git version 2.53.0
+2026-04-21T20:13:50.6444785Z ##[endgroup]
+2026-04-21T20:13:50.6451062Z Temporarily overriding HOME='/home/runner/work/_temp/4acfb0e5-c139-4944-a559-6ce82ca930bf' before making global git config changes
+2026-04-21T20:13:50.6453383Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-21T20:13:50.6455142Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/infra/infra
+2026-04-21T20:13:50.6457976Z Deleting the contents of '/home/runner/work/infra/infra'
+2026-04-21T20:13:50.6459637Z ##[group]Initializing the repository
+2026-04-21T20:13:50.6460621Z [command]/usr/bin/git init /home/runner/work/infra/infra
+2026-04-21T20:13:50.6462397Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-04-21T20:13:50.6463922Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-04-21T20:13:50.6465349Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-04-21T20:13:50.6466474Z hint: call:
+2026-04-21T20:13:50.6467063Z hint:
+2026-04-21T20:13:50.6467830Z hint: 	git config --global init.defaultBranch <name>
+2026-04-21T20:13:50.6468744Z hint:
+2026-04-21T20:13:50.6469623Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-04-21T20:13:50.6471056Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-04-21T20:13:50.6472481Z hint:
+2026-04-21T20:13:50.6473130Z hint: 	git branch -m <name>
+2026-04-21T20:13:50.6474062Z hint:
+2026-04-21T20:13:50.6475035Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-04-21T20:13:50.6476513Z Initialized empty Git repository in /home/runner/work/infra/infra/.git/
+2026-04-21T20:13:50.6479073Z [command]/usr/bin/git remote add origin https://github.com/southernlights-tech/infra
+2026-04-21T20:13:50.6481509Z ##[endgroup]
+2026-04-21T20:13:50.6482925Z ##[group]Disabling automatic garbage collection
+2026-04-21T20:13:50.6483915Z [command]/usr/bin/git config --local gc.auto 0
+2026-04-21T20:13:50.6485982Z ##[endgroup]
+2026-04-21T20:13:50.6487000Z ##[group]Setting up auth
+2026-04-21T20:13:50.6488057Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-21T20:13:50.6491414Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-21T20:13:50.6495146Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-04-21T20:13:50.6499046Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-04-21T20:13:50.6556422Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-04-21T20:13:50.6602456Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-04-21T20:13:50.6861325Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-04-21T20:13:50.6902907Z ##[endgroup]
+2026-04-21T20:13:50.6904138Z ##[group]Fetching the repository
+2026-04-21T20:13:50.6905760Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +47e011010d53fdae70a59a768e06c5b26ead0429:refs/remotes/pull/39/merge
+2026-04-21T20:13:51.1024125Z From https://github.com/southernlights-tech/infra
+2026-04-21T20:13:51.1033372Z  * [new ref]         47e011010d53fdae70a59a768e06c5b26ead0429 -> pull/39/merge
+2026-04-21T20:13:51.1061313Z ##[endgroup]
+2026-04-21T20:13:51.1063012Z ##[group]Determining the checkout info
+2026-04-21T20:13:51.1064517Z ##[endgroup]
+2026-04-21T20:13:51.1065444Z [command]/usr/bin/git sparse-checkout disable
+2026-04-21T20:13:51.1068029Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-04-21T20:13:51.1116681Z ##[group]Checking out the ref
+2026-04-21T20:13:51.1118737Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/39/merge
+2026-04-21T20:13:51.1328939Z Note: switching to 'refs/remotes/pull/39/merge'.
+2026-04-21T20:13:51.1459261Z 
+2026-04-21T20:13:51.1460748Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-04-21T20:13:51.1464083Z changes and commit them, and you can discard any commits you make in this
+2026-04-21T20:13:51.1466388Z state without impacting any branches by switching back to a branch.
+2026-04-21T20:13:51.1468153Z 
+2026-04-21T20:13:51.1469197Z If you want to create a new branch to retain commits you create, you may
+2026-04-21T20:13:51.1472095Z do so (now or later) by using -c with the switch command. Example:
+2026-04-21T20:13:51.1473596Z 
+2026-04-21T20:13:51.1475139Z   git switch -c <new-branch-name>
+2026-04-21T20:13:51.1478723Z 
+2026-04-21T20:13:51.1479452Z Or undo this operation with:
+2026-04-21T20:13:51.1480356Z 
+2026-04-21T20:13:51.1480834Z   git switch -
+2026-04-21T20:13:51.1481387Z 
+2026-04-21T20:13:51.1482417Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-04-21T20:13:51.1483410Z 
+2026-04-21T20:13:51.1484558Z HEAD is now at 47e0110 Merge 37bd0d0437d7b1a44c8f2caefd2af38bde07b396 into 31fd6eff935a01f06c9a81569b539e48e9e2ed9f
+2026-04-21T20:13:51.1487688Z ##[endgroup]
+2026-04-21T20:13:51.1489495Z [command]/usr/bin/git log -1 --format=%H
+2026-04-21T20:13:51.1490455Z 47e011010d53fdae70a59a768e06c5b26ead0429
+2026-04-21T20:13:51.2069317Z ##[group]Run aquasecurity/trivy-action@v0.35.0
+2026-04-21T20:13:51.2070176Z with:
+2026-04-21T20:13:51.2070797Z   scan-type: config
+2026-04-21T20:13:51.2071440Z   scan-ref: infra/
+2026-04-21T20:13:51.2072251Z   format: table
+2026-04-21T20:13:51.2072900Z   severity: CRITICAL,HIGH
+2026-04-21T20:13:51.2073591Z   exit-code: 0
+2026-04-21T20:13:51.2074214Z   version: v0.69.3
+2026-04-21T20:13:51.2074871Z   ignore-unfixed: false
+2026-04-21T20:13:51.2075545Z   vuln-type: os,library
+2026-04-21T20:13:51.2076313Z   cache-dir: /home/runner/work/infra/infra/.cache/trivy
+2026-04-21T20:13:51.2077169Z   list-all-pkgs: false
+2026-04-21T20:13:51.2077828Z   cache: true
+2026-04-21T20:13:51.2078474Z   skip-setup-trivy: false
+2026-04-21T20:13:51.2079409Z   token-setup-trivy: ***
+2026-04-21T20:13:51.2080108Z ##[endgroup]
+2026-04-21T20:13:51.2308214Z ##[group]Run aquasecurity/setup-trivy@e6c2c5e321ed9123bda567646e2f96565e34abe1
+2026-04-21T20:13:51.2309271Z with:
+2026-04-21T20:13:51.2309957Z   version: v0.69.3
+2026-04-21T20:13:51.2310613Z   cache: true
+2026-04-21T20:13:51.2311434Z   token: ***
+2026-04-21T20:13:51.2312361Z   path: $HOME/.local/bin
+2026-04-21T20:13:51.2313129Z   github-server-url: https://github.com
+2026-04-21T20:13:51.2313933Z ##[endgroup]
+2026-04-21T20:13:51.2377003Z ##[group]Run echo "dir=$HOME/.local/bin/trivy-bin" >> $GITHUB_OUTPUT
+2026-04-21T20:13:51.2378663Z [36;1mecho "dir=$HOME/.local/bin/trivy-bin" >> $GITHUB_OUTPUT[0m
+2026-04-21T20:13:51.2407367Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-21T20:13:51.2408280Z ##[endgroup]
+2026-04-21T20:13:51.2644485Z ##[group]Run actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+2026-04-21T20:13:51.2645424Z with:
+2026-04-21T20:13:51.2646063Z   path: /home/runner/.local/bin/trivy-bin
+2026-04-21T20:13:51.2646903Z   key: trivy-binary-v0.69.3-Linux-X64
+2026-04-21T20:13:51.2647670Z   enableCrossOsArchive: false
+2026-04-21T20:13:51.2648420Z   fail-on-cache-miss: false
+2026-04-21T20:13:51.2649106Z   lookup-only: false
+2026-04-21T20:13:51.2649784Z   save-always: false
+2026-04-21T20:13:51.2650424Z ##[endgroup]
+2026-04-21T20:13:51.5209416Z Cache hit for: trivy-binary-v0.69.3-Linux-X64
+2026-04-21T20:13:52.3098957Z Received 44265629 of 44265629 (100.0%), 62.2 MBs/sec
+2026-04-21T20:13:52.3101175Z Cache Size: ~42 MB (44265629 B)
+2026-04-21T20:13:52.3132140Z [command]/usr/bin/tar -xf /home/runner/work/_temp/ae45861c-ed24-4424-800e-470d52dbeec8/cache.tzst -P -C /home/runner/work/infra/infra --use-compress-program unzstd
+2026-04-21T20:13:52.7482866Z Cache restored successfully
+2026-04-21T20:13:52.7653582Z Cache restored from key: trivy-binary-v0.69.3-Linux-X64
+2026-04-21T20:13:52.7859270Z ##[group]Run echo /home/runner/.local/bin/trivy-bin >> $GITHUB_PATH
+2026-04-21T20:13:52.7860884Z [36;1mecho /home/runner/.local/bin/trivy-bin >> $GITHUB_PATH[0m
+2026-04-21T20:13:52.7885839Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-21T20:13:52.7887194Z ##[endgroup]
+2026-04-21T20:13:52.8050445Z ##[group]Run echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+2026-04-21T20:13:52.8052092Z [36;1mecho "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT[0m
+2026-04-21T20:13:52.8077813Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-21T20:13:52.8079019Z ##[endgroup]
+2026-04-21T20:13:52.8283895Z ##[group]Run actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+2026-04-21T20:13:52.8285165Z with:
+2026-04-21T20:13:52.8285912Z   path: /home/runner/work/infra/infra/.cache/trivy
+2026-04-21T20:13:52.8286995Z   key: cache-trivy-2026-04-21
+2026-04-21T20:13:52.8287867Z   restore-keys: cache-trivy-
+2026-04-21T20:13:52.8288729Z   enableCrossOsArchive: false
+2026-04-21T20:13:52.8289802Z   fail-on-cache-miss: false
+2026-04-21T20:13:52.8290620Z   lookup-only: false
+2026-04-21T20:13:52.8291344Z   save-always: false
+2026-04-21T20:13:52.8292187Z ##[endgroup]
+2026-04-21T20:13:53.1223389Z Cache hit for: cache-trivy-2026-04-21
+2026-04-21T20:13:53.4180713Z Received 205777 of 205777 (100.0%), 1.3 MBs/sec
+2026-04-21T20:13:53.4187562Z Cache Size: ~0 MB (205777 B)
+2026-04-21T20:13:53.4273236Z [command]/usr/bin/tar -xf /home/runner/work/_temp/ae250bb3-7f10-4b62-bda1-5481183887a1/cache.tzst -P -C /home/runner/work/infra/infra --use-compress-program unzstd
+2026-04-21T20:13:53.4550919Z Cache restored successfully
+2026-04-21T20:13:53.4633521Z Cache restored from key: cache-trivy-2026-04-21
+2026-04-21T20:13:53.4718342Z ##[group]Run echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+2026-04-21T20:13:53.4718741Z [36;1mecho "$GITHUB_ACTION_PATH" >> $GITHUB_PATH[0m
+2026-04-21T20:13:53.4740768Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-21T20:13:53.4741113Z env:
+2026-04-21T20:13:53.4741488Z   GITHUB_ACTION_PATH: /home/runner/work/_actions/aquasecurity/trivy-action/v0.35.0
+2026-04-21T20:13:53.4742197Z ##[endgroup]
+2026-04-21T20:13:53.4809059Z ##[group]Run rm -f trivy_envs.txt
+2026-04-21T20:13:53.4809379Z [36;1mrm -f trivy_envs.txt[0m
+2026-04-21T20:13:53.4809650Z [36;1mtouch trivy_envs.txt[0m
+2026-04-21T20:13:53.4830055Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-21T20:13:53.4830416Z ##[endgroup]
+2026-04-21T20:13:53.4920953Z ##[group]Run # Note: There is currently no way to distinguish between undefined variables and empty strings in GitHub Actions.
+2026-04-21T20:13:53.4922235Z [36;1m# Note: There is currently no way to distinguish between undefined variables and empty strings in GitHub Actions.[0m
+2026-04-21T20:13:53.4922949Z [36;1m# This limitation affects how we handle default values and empty inputs.[0m
+2026-04-21T20:13:53.4923692Z [36;1m# For more information, see: https://github.com/actions/runner/issues/924[0m
+2026-04-21T20:13:53.4924121Z [36;1m[0m
+2026-04-21T20:13:53.4924511Z [36;1m# The following logic implements the configuration priority described in the README:[0m
+2026-04-21T20:13:53.4924958Z [36;1m#[0m
+2026-04-21T20:13:53.4925153Z [36;1m# Inputs[0m
+2026-04-21T20:13:53.4925389Z [36;1m# Environment Variables[0m
+2026-04-21T20:13:53.4925672Z [36;1m# Config File[0m
+2026-04-21T20:13:53.4925914Z [36;1m# Defaults[0m
+2026-04-21T20:13:53.4926130Z [36;1m#[0m
+2026-04-21T20:13:53.4926555Z [36;1m# As noted above defaults are awkward to handle as GitHub Actions will inject those values as the input[0m
+2026-04-21T20:13:53.4927257Z [36;1m# if the caller doesn't provide them, thus if the input matches the default we don't set it as we[0m
+2026-04-21T20:13:53.4927936Z [36;1m# can't tell the difference.  Plus if we did set it when it was the default value then it could potentially[0m
+2026-04-21T20:13:53.4928718Z [36;1m# override an external environment variable, or something in the callers configuration file, which then wouldn't[0m
+2026-04-21T20:13:53.4929338Z [36;1m# match the configuration priority that is documented.[0m
+2026-04-21T20:13:53.4929703Z [36;1mset_env_var_if_provided() {[0m
+2026-04-21T20:13:53.4929987Z [36;1m  local var_name="$1"[0m
+2026-04-21T20:13:53.4930254Z [36;1m  local input_value="$2"[0m
+2026-04-21T20:13:53.4930732Z [36;1m  local default_value="$3"[0m
+2026-04-21T20:13:53.4930998Z [36;1m[0m
+2026-04-21T20:13:53.4931297Z [36;1m  if [ -n "$input_value" ] && [ "$input_value" != "$default_value" ]; then[0m
+2026-04-21T20:13:53.4931997Z [36;1m    # If action was provided with explicit input by the caller set that[0m
+2026-04-21T20:13:53.4932807Z [36;1m    # Use printf %q to safely escape special characters and prevent command injection[0m
+2026-04-21T20:13:53.4933352Z [36;1m    printf 'export %s=%q\n' "$var_name" "$input_value" >> trivy_envs.txt[0m
+2026-04-21T20:13:53.4933726Z [36;1m  fi[0m
+2026-04-21T20:13:53.4933927Z [36;1m}[0m
+2026-04-21T20:13:53.4934118Z [36;1m[0m
+2026-04-21T20:13:53.4934421Z [36;1m# Set environment variables, handling those with default values[0m
+2026-04-21T20:13:53.4935018Z [36;1m# cf. https://aquasecurity.github.io/trivy/latest/docs/configuration/#environment-variables[0m
+2026-04-21T20:13:53.4935585Z [36;1mset_env_var_if_provided "TRIVY_INPUT" "$INPUT_INPUT" ""[0m
+2026-04-21T20:13:53.4936196Z [36;1mset_env_var_if_provided "TRIVY_EXIT_CODE" "$INPUT_EXIT_CODE" ""[0m
+2026-04-21T20:13:53.4936726Z [36;1mset_env_var_if_provided "TRIVY_IGNORE_UNFIXED" "$INPUT_IGNORE_UNFIXED" "false"[0m
+2026-04-21T20:13:53.4937279Z [36;1mset_env_var_if_provided "TRIVY_PKG_TYPES" "$INPUT_VULN_TYPE" "os,library"[0m
+2026-04-21T20:13:53.4937887Z [36;1mset_env_var_if_provided "TRIVY_SEVERITY" "$INPUT_SEVERITY" "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"[0m
+2026-04-21T20:13:53.4938459Z [36;1mset_env_var_if_provided "TRIVY_FORMAT" "$INPUT_FORMAT" "table"[0m
+2026-04-21T20:13:53.4938907Z [36;1mset_env_var_if_provided "TRIVY_TEMPLATE" "$INPUT_TEMPLATE" ""[0m
+2026-04-21T20:13:53.4939350Z [36;1mset_env_var_if_provided "TRIVY_OUTPUT" "$INPUT_OUTPUT" ""[0m
+2026-04-21T20:13:53.4939798Z [36;1mset_env_var_if_provided "TRIVY_SKIP_DIRS" "$INPUT_SKIP_DIRS" ""[0m
+2026-04-21T20:13:53.4940264Z [36;1mset_env_var_if_provided "TRIVY_SKIP_FILES" "$INPUT_SKIP_FILES" ""[0m
+2026-04-21T20:13:53.4940733Z [36;1mset_env_var_if_provided "TRIVY_TIMEOUT" "$INPUT_TIMEOUT" ""[0m
+2026-04-21T20:13:53.4941623Z [36;1mset_env_var_if_provided "TRIVY_IGNORE_POLICY" "$INPUT_IGNORE_POLICY" ""[0m
+2026-04-21T20:13:53.4942525Z [36;1mset_env_var_if_provided "TRIVY_QUIET" "$INPUT_HIDE_PROGRESS" ""[0m
+2026-04-21T20:13:53.4943032Z [36;1mset_env_var_if_provided "TRIVY_LIST_ALL_PKGS" "$INPUT_LIST_ALL_PKGS" "false"[0m
+2026-04-21T20:13:53.4943533Z [36;1mset_env_var_if_provided "TRIVY_SCANNERS" "$INPUT_SCANNERS" ""[0m
+2026-04-21T20:13:53.4943991Z [36;1mset_env_var_if_provided "TRIVY_CONFIG" "$INPUT_TRIVY_CONFIG" ""[0m
+2026-04-21T20:13:53.4944432Z [36;1mset_env_var_if_provided "TRIVY_TF_VARS" "$INPUT_TF_VARS" ""[0m
+2026-04-21T20:13:53.4944893Z [36;1mset_env_var_if_provided "TRIVY_DOCKER_HOST" "$INPUT_DOCKER_HOST" ""[0m
+2026-04-21T20:13:53.4965289Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-21T20:13:53.4965656Z env:
+2026-04-21T20:13:53.4965867Z   INPUT_INPUT: 
+2026-04-21T20:13:53.4966094Z   INPUT_EXIT_CODE: 0
+2026-04-21T20:13:53.4966324Z   INPUT_IGNORE_UNFIXED: false
+2026-04-21T20:13:53.4966592Z   INPUT_VULN_TYPE: os,library
+2026-04-21T20:13:53.4966860Z   INPUT_SEVERITY: CRITICAL,HIGH
+2026-04-21T20:13:53.4967125Z   INPUT_FORMAT: table
+2026-04-21T20:13:53.4967353Z   INPUT_TEMPLATE: 
+2026-04-21T20:13:53.4967562Z   INPUT_OUTPUT: 
+2026-04-21T20:13:53.4967776Z   INPUT_SKIP_DIRS: 
+2026-04-21T20:13:53.4967996Z   INPUT_SKIP_FILES: 
+2026-04-21T20:13:53.4968213Z   INPUT_TIMEOUT: 
+2026-04-21T20:13:53.4968432Z   INPUT_IGNORE_POLICY: 
+2026-04-21T20:13:53.4968666Z   INPUT_HIDE_PROGRESS: 
+2026-04-21T20:13:53.4968900Z   INPUT_LIST_ALL_PKGS: false
+2026-04-21T20:13:53.4969149Z   INPUT_SCANNERS: 
+2026-04-21T20:13:53.4969361Z   INPUT_TRIVY_CONFIG: 
+2026-04-21T20:13:53.4969584Z   INPUT_TF_VARS: 
+2026-04-21T20:13:53.4969794Z   INPUT_DOCKER_HOST: 
+2026-04-21T20:13:53.4970013Z ##[endgroup]
+2026-04-21T20:13:53.5040784Z ##[group]Run entrypoint.sh
+2026-04-21T20:13:53.5041060Z [36;1mentrypoint.sh[0m
+2026-04-21T20:13:53.5062103Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-21T20:13:53.5062482Z env:
+2026-04-21T20:13:53.5062710Z   INPUT_SCAN_TYPE: config
+2026-04-21T20:13:53.5062966Z   INPUT_IMAGE_REF: 
+2026-04-21T20:13:53.5063186Z   INPUT_SCAN_REF: infra/
+2026-04-21T20:13:53.5063433Z   INPUT_TRIVYIGNORES: 
+2026-04-21T20:13:53.5063665Z   INPUT_GITHUB_PAT: 
+2026-04-21T20:13:53.5063913Z   INPUT_LIMIT_SEVERITIES_FOR_SARIF: 
+2026-04-21T20:13:53.5064270Z   TRIVY_CACHE_DIR: /home/runner/work/infra/infra/.cache/trivy
+2026-04-21T20:13:53.5064605Z ##[endgroup]
+2026-04-21T20:13:53.5121748Z Running Trivy with options: trivy config infra/
+2026-04-21T20:13:53.5699337Z 2026-04-21T20:13:53Z	INFO	[misconfig] Misconfiguration scanning is enabled
+2026-04-21T20:13:53.5703025Z 2026-04-21T20:13:53Z	INFO	[checks-client] Using existing checks from cache	path="/home/runner/work/infra/infra/.cache/trivy/policy/content"
+2026-04-21T20:13:54.8913102Z 2026-04-21T20:13:54Z	INFO	Detected config files	num=0
+2026-04-21T20:13:54.8913590Z 
+2026-04-21T20:13:54.8914681Z 2026-04-21T20:13:54Z	WARN	[report] Supported files for scanner(s) not found.	scanners=[misconfig]
+2026-04-21T20:13:54.8932150Z 
+2026-04-21T20:13:54.8932322Z Report Summary
+2026-04-21T20:13:54.8952923Z 📣 [34mNotices:[0m
+2026-04-21T20:13:54.8953166Z 
+2026-04-21T20:13:54.8973224Z   - Version 0.70.0 of Trivy is now available, current version is 0.69.3
+2026-04-21T20:13:54.8974063Z ┌────────┬──────┬───────────────────┐
+2026-04-21T20:13:54.8994594Z 
+2026-04-21T20:13:54.8994937Z │ Target │ Type │ Misconfigurations │
+2026-04-21T20:13:54.8998206Z ├────────┼──────┼───────────────────┤
+2026-04-21T20:13:54.8999125Z │   -    │  -   │         -         │
+2026-04-21T20:13:54.8999738Z └────────┴──────┴───────────────────┘
+2026-04-21T20:13:54.9000281Z Legend:
+2026-04-21T20:13:54.9000689Z - '-': Not scanned
+2026-04-21T20:13:54.9001172Z - '0': Clean (no security findings detected)
+2026-04-21T20:13:54.9001613Z 
+2026-04-21T20:13:54.9013062Z To suppress version checks, run Trivy scans with the --skip-version-check flag
+2026-04-21T20:13:54.9015440Z 
+2026-04-21T20:13:54.9065907Z ##[group]Run rm -f trivy_envs.txt
+2026-04-21T20:13:54.9066371Z [36;1mrm -f trivy_envs.txt[0m
+2026-04-21T20:13:54.9095747Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-21T20:13:54.9096277Z ##[endgroup]
+2026-04-21T20:13:54.9486670Z Post job cleanup.
+2026-04-21T20:13:54.9542127Z Post job cleanup.
+2026-04-21T20:13:55.1394734Z Cache hit occurred on the primary key cache-trivy-2026-04-21, not saving cache.
+2026-04-21T20:13:55.1575678Z Post job cleanup.
+2026-04-21T20:13:55.1627597Z Post job cleanup.
+2026-04-21T20:13:55.3472611Z Cache hit occurred on the primary key trivy-binary-v0.69.3-Linux-X64, not saving cache.
+2026-04-21T20:13:55.3714417Z Post job cleanup.
+2026-04-21T20:13:55.5132402Z [command]/usr/bin/git version
+2026-04-21T20:13:55.5198526Z git version 2.53.0
+2026-04-21T20:13:55.5203294Z Temporarily overriding HOME='/home/runner/work/_temp/620fbe2e-5def-4c98-a2b1-67675d1b6706' before making global git config changes
+2026-04-21T20:13:55.5209399Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-21T20:13:55.5210671Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/infra/infra
+2026-04-21T20:13:55.5289788Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-21T20:13:55.5293007Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-21T20:13:55.5612418Z fatal: No url found for submodule path 'infra' in .gitmodules
+2026-04-21T20:13:55.5751220Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+2026-04-21T20:13:55.5836556Z Cleaning up orphan processes
+2026-04-21T20:13:55.6222567Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809, actions/checkout@v4. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,0 +1,270 @@
+﻿2026-04-21T20:13:48.1842318Z Current runner version: '2.333.1'
+2026-04-21T20:13:48.1914875Z ##[group]Runner Image Provisioner
+2026-04-21T20:13:48.1916253Z Hosted Compute Agent
+2026-04-21T20:13:48.1917133Z Version: 20260213.493
+2026-04-21T20:13:48.1918108Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-04-21T20:13:48.1919292Z Build Date: 2026-02-13T00:28:41Z
+2026-04-21T20:13:48.1920486Z Worker ID: {304d885a-efc0-4495-a806-3d72de78783b}
+2026-04-21T20:13:48.1921610Z Azure Region: northcentralus
+2026-04-21T20:13:48.1922642Z ##[endgroup]
+2026-04-21T20:13:48.1925961Z ##[group]Operating System
+2026-04-21T20:13:48.1926881Z Ubuntu
+2026-04-21T20:13:48.1927726Z 24.04.4
+2026-04-21T20:13:48.1928435Z LTS
+2026-04-21T20:13:48.1929160Z ##[endgroup]
+2026-04-21T20:13:48.1929886Z ##[group]Runner Image
+2026-04-21T20:13:48.1930948Z Image: ubuntu-24.04
+2026-04-21T20:13:48.1931728Z Version: 20260413.86.1
+2026-04-21T20:13:48.1933876Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+2026-04-21T20:13:48.1956923Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+2026-04-21T20:13:48.1958682Z ##[endgroup]
+2026-04-21T20:13:48.1960588Z ##[group]GITHUB_TOKEN Permissions
+2026-04-21T20:13:48.1963484Z Contents: read
+2026-04-21T20:13:48.1964941Z Metadata: read
+2026-04-21T20:13:48.1965871Z PullRequests: write
+2026-04-21T20:13:48.1966695Z ##[endgroup]
+2026-04-21T20:13:48.1970039Z Secret source: Actions
+2026-04-21T20:13:48.1971357Z Prepare workflow directory
+2026-04-21T20:13:48.2641694Z Prepare all required actions
+2026-04-21T20:13:48.2699195Z Getting action download info
+2026-04-21T20:13:48.7297385Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-04-21T20:13:48.8897239Z Download action repository 'hashicorp/setup-terraform@v3' (SHA:b9cd54a3c349d3f38e8881555d616ced269862dd)
+2026-04-21T20:13:49.3471986Z Download action repository 'actions/github-script@v7' (SHA:f28e40c7f34bde8b3046d885e986cb6290c5673b)
+2026-04-21T20:13:49.8919913Z Complete job name: Validate Terraform (01_network/dev)
+2026-04-21T20:13:49.9804173Z ##[group]Run actions/checkout@v4
+2026-04-21T20:13:49.9805753Z with:
+2026-04-21T20:13:49.9806522Z   repository: southernlights-tech/infra
+2026-04-21T20:13:49.9807845Z   token: ***
+2026-04-21T20:13:49.9808573Z   ssh-strict: true
+2026-04-21T20:13:49.9809317Z   ssh-user: git
+2026-04-21T20:13:49.9810132Z   persist-credentials: true
+2026-04-21T20:13:49.9811020Z   clean: true
+2026-04-21T20:13:49.9811798Z   sparse-checkout-cone-mode: true
+2026-04-21T20:13:49.9812761Z   fetch-depth: 1
+2026-04-21T20:13:49.9813517Z   fetch-tags: false
+2026-04-21T20:13:49.9814292Z   show-progress: true
+2026-04-21T20:13:49.9815268Z   lfs: false
+2026-04-21T20:13:49.9815977Z   submodules: false
+2026-04-21T20:13:49.9816780Z   set-safe-directory: true
+2026-04-21T20:13:49.9817910Z ##[endgroup]
+2026-04-21T20:13:50.1023423Z Syncing repository: southernlights-tech/infra
+2026-04-21T20:13:50.1028032Z ##[group]Getting Git version info
+2026-04-21T20:13:50.1030049Z Working directory is '/home/runner/work/infra/infra'
+2026-04-21T20:13:50.1033012Z [command]/usr/bin/git version
+2026-04-21T20:13:50.1061046Z git version 2.53.0
+2026-04-21T20:13:50.1091800Z ##[endgroup]
+2026-04-21T20:13:50.1109162Z Temporarily overriding HOME='/home/runner/work/_temp/e6d15c8d-9950-4439-b2ee-76bea04960c7' before making global git config changes
+2026-04-21T20:13:50.1114797Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-21T20:13:50.1118973Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/infra/infra
+2026-04-21T20:13:50.1151535Z Deleting the contents of '/home/runner/work/infra/infra'
+2026-04-21T20:13:50.1157004Z ##[group]Initializing the repository
+2026-04-21T20:13:50.1162088Z [command]/usr/bin/git init /home/runner/work/infra/infra
+2026-04-21T20:13:50.1276417Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-04-21T20:13:50.1296649Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-04-21T20:13:50.1299365Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-04-21T20:13:50.1301169Z hint: call:
+2026-04-21T20:13:50.1302231Z hint:
+2026-04-21T20:13:50.1303501Z hint: 	git config --global init.defaultBranch <name>
+2026-04-21T20:13:50.1305270Z hint:
+2026-04-21T20:13:50.1306786Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-04-21T20:13:50.1308936Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-04-21T20:13:50.1310656Z hint:
+2026-04-21T20:13:50.1311763Z hint: 	git branch -m <name>
+2026-04-21T20:13:50.1313019Z hint:
+2026-04-21T20:13:50.1342992Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-04-21T20:13:50.1346717Z Initialized empty Git repository in /home/runner/work/infra/infra/.git/
+2026-04-21T20:13:50.1351598Z [command]/usr/bin/git remote add origin https://github.com/southernlights-tech/infra
+2026-04-21T20:13:50.1374142Z ##[endgroup]
+2026-04-21T20:13:50.1377567Z ##[group]Disabling automatic garbage collection
+2026-04-21T20:13:50.1380442Z [command]/usr/bin/git config --local gc.auto 0
+2026-04-21T20:13:50.1411029Z ##[endgroup]
+2026-04-21T20:13:50.1413700Z ##[group]Setting up auth
+2026-04-21T20:13:50.1418340Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-21T20:13:50.1457554Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-21T20:13:50.1817453Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-04-21T20:13:50.1873873Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-04-21T20:13:50.2218745Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-04-21T20:13:50.2340682Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-04-21T20:13:50.2696021Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-04-21T20:13:50.2735865Z ##[endgroup]
+2026-04-21T20:13:50.2738683Z ##[group]Fetching the repository
+2026-04-21T20:13:50.2748956Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +47e011010d53fdae70a59a768e06c5b26ead0429:refs/remotes/pull/39/merge
+2026-04-21T20:13:50.6502938Z From https://github.com/southernlights-tech/infra
+2026-04-21T20:13:50.6509750Z  * [new ref]         47e011010d53fdae70a59a768e06c5b26ead0429 -> pull/39/merge
+2026-04-21T20:13:50.6539872Z ##[endgroup]
+2026-04-21T20:13:50.6542523Z ##[group]Determining the checkout info
+2026-04-21T20:13:50.6545574Z ##[endgroup]
+2026-04-21T20:13:50.6548117Z [command]/usr/bin/git sparse-checkout disable
+2026-04-21T20:13:50.6590676Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-04-21T20:13:50.6649427Z ##[group]Checking out the ref
+2026-04-21T20:13:50.6651743Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/39/merge
+2026-04-21T20:13:50.6831027Z Note: switching to 'refs/remotes/pull/39/merge'.
+2026-04-21T20:13:50.6845107Z 
+2026-04-21T20:13:50.6851933Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-04-21T20:13:50.6855777Z changes and commit them, and you can discard any commits you make in this
+2026-04-21T20:13:50.6858904Z state without impacting any branches by switching back to a branch.
+2026-04-21T20:13:50.6860859Z 
+2026-04-21T20:13:50.6867141Z If you want to create a new branch to retain commits you create, you may
+2026-04-21T20:13:50.6870248Z do so (now or later) by using -c with the switch command. Example:
+2026-04-21T20:13:50.6872209Z 
+2026-04-21T20:13:50.6873125Z   git switch -c <new-branch-name>
+2026-04-21T20:13:50.6875350Z 
+2026-04-21T20:13:50.6876162Z Or undo this operation with:
+2026-04-21T20:13:50.6877344Z 
+2026-04-21T20:13:50.6878061Z   git switch -
+2026-04-21T20:13:50.6879039Z 
+2026-04-21T20:13:50.6880479Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-04-21T20:13:50.6882636Z 
+2026-04-21T20:13:50.6885217Z HEAD is now at 47e0110 Merge 37bd0d0437d7b1a44c8f2caefd2af38bde07b396 into 31fd6eff935a01f06c9a81569b539e48e9e2ed9f
+2026-04-21T20:13:50.6892048Z ##[endgroup]
+2026-04-21T20:13:50.6927843Z [command]/usr/bin/git log -1 --format=%H
+2026-04-21T20:13:50.7047769Z 47e011010d53fdae70a59a768e06c5b26ead0429
+2026-04-21T20:13:50.7243140Z ##[group]Run hashicorp/setup-terraform@v3
+2026-04-21T20:13:50.7244104Z with:
+2026-04-21T20:13:50.7245141Z   terraform_version: ~1.9
+2026-04-21T20:13:50.7246051Z   cli_config_credentials_hostname: app.terraform.io
+2026-04-21T20:13:50.7247084Z   terraform_wrapper: true
+2026-04-21T20:13:50.7247806Z ##[endgroup]
+2026-04-21T20:13:51.4827768Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/c3852788-2934-49aa-a758-6101cdc92c9e
+2026-04-21T20:13:52.1959918Z ##[group]Run terraform fmt -check -recursive
+2026-04-21T20:13:52.1960481Z [36;1mterraform fmt -check -recursive[0m
+2026-04-21T20:13:52.1989353Z shell: /usr/bin/bash -e {0}
+2026-04-21T20:13:52.1989690Z env:
+2026-04-21T20:13:52.1990166Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/e42a4099-4705-4f9c-a2fb-2171b3411925
+2026-04-21T20:13:52.1990659Z ##[endgroup]
+2026-04-21T20:13:52.4229857Z ##[group]Run terraform init -backend=false
+2026-04-21T20:13:52.4230423Z [36;1mterraform init -backend=false[0m
+2026-04-21T20:13:52.4253867Z shell: /usr/bin/bash -e {0}
+2026-04-21T20:13:52.4254185Z env:
+2026-04-21T20:13:52.4254942Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/e42a4099-4705-4f9c-a2fb-2171b3411925
+2026-04-21T20:13:52.4255434Z ##[endgroup]
+2026-04-21T20:13:52.5437210Z [0m[1mInitializing modules...[0m
+2026-04-21T20:13:52.5460344Z Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=488ab91e34a24a86957e397d9f7262ec5925586a for label...
+2026-04-21T20:13:53.1563039Z - label in .terraform/modules/label
+2026-04-21T20:13:53.1565489Z Downloading git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=4376118471a850471de070ec743c489afac0af73 for subnets...
+2026-04-21T20:13:53.7279175Z - subnets in .terraform/modules/subnets
+2026-04-21T20:13:53.8186080Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for subnets.nat_instance_label...
+2026-04-21T20:13:55.2776239Z - subnets.nat_instance_label in .terraform/modules/subnets.nat_instance_label
+2026-04-21T20:13:55.2792554Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for subnets.nat_label...
+2026-04-21T20:13:55.2865436Z - subnets.nat_label in .terraform/modules/subnets.nat_label
+2026-04-21T20:13:55.2866551Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for subnets.private_label...
+2026-04-21T20:13:55.2963207Z - subnets.private_label in .terraform/modules/subnets.private_label
+2026-04-21T20:13:55.2970881Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for subnets.public_label...
+2026-04-21T20:13:55.3028734Z - subnets.public_label in .terraform/modules/subnets.public_label
+2026-04-21T20:13:55.3033179Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for subnets.this...
+2026-04-21T20:13:55.3093321Z - subnets.this in .terraform/modules/subnets.this
+2026-04-21T20:13:55.3322803Z Downloading registry.terraform.io/cloudposse/utils/aws 1.4.0 for subnets.utils...
+2026-04-21T20:13:55.8886028Z - subnets.utils in .terraform/modules/subnets.utils
+2026-04-21T20:13:55.8887602Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for subnets.utils.this...
+2026-04-21T20:13:55.8978094Z - subnets.utils.this in .terraform/modules/subnets.utils.this
+2026-04-21T20:13:55.8982146Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for this...
+2026-04-21T20:13:55.9043334Z - this in .terraform/modules/this
+2026-04-21T20:13:55.9046932Z Downloading git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=c71b3086e4e88f2c858d6f3bbaa8da54b8b9ec2a for vpc...
+2026-04-21T20:13:56.4696321Z - vpc in .terraform/modules/vpc
+2026-04-21T20:13:56.4705507Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for vpc.eigw_label...
+2026-04-21T20:13:56.4802509Z - vpc.eigw_label in .terraform/modules/vpc.eigw_label
+2026-04-21T20:13:56.4809053Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for vpc.igw_label...
+2026-04-21T20:13:56.5016424Z - vpc.igw_label in .terraform/modules/vpc.igw_label
+2026-04-21T20:13:56.5045447Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for vpc.label...
+2026-04-21T20:13:56.5135088Z - vpc.label in .terraform/modules/vpc.label
+2026-04-21T20:13:56.5146888Z Downloading registry.terraform.io/cloudposse/label/null 0.25.0 for vpc.this...
+2026-04-21T20:13:56.5222098Z - vpc.this in .terraform/modules/vpc.this
+2026-04-21T20:13:56.5315350Z [0m[1mInitializing provider plugins...[0m
+2026-04-21T20:13:56.5317092Z - Reusing previous version of hashicorp/aws from the dependency lock file
+2026-04-21T20:13:56.7157354Z - Installing hashicorp/aws v5.94.1...
+2026-04-21T20:14:03.2521981Z - Installed hashicorp/aws v5.94.1 (signed by HashiCorp)
+2026-04-21T20:14:03.2524838Z 
+2026-04-21T20:14:03.2525708Z [0m[1m[32mTerraform has been successfully initialized![0m[32m[0m
+2026-04-21T20:14:03.2526518Z [0m[32m
+2026-04-21T20:14:03.2527807Z You may now begin working with Terraform. Try running "terraform plan" to see
+2026-04-21T20:14:03.2529053Z any changes that are required for your infrastructure. All Terraform commands
+2026-04-21T20:14:03.2529946Z should now work.
+2026-04-21T20:14:03.2530258Z 
+2026-04-21T20:14:03.2530727Z If you ever set or change modules or backend configuration for Terraform,
+2026-04-21T20:14:03.2531748Z rerun this command to reinitialize your working directory. If you forget, other
+2026-04-21T20:14:03.2532760Z commands will detect it and remind you to do so if necessary.[0m
+2026-04-21T20:14:03.2654150Z ##[group]Run terraform validate -no-color
+2026-04-21T20:14:03.2655341Z [36;1mterraform validate -no-color[0m
+2026-04-21T20:14:03.2676223Z shell: /usr/bin/bash -e {0}
+2026-04-21T20:14:03.2676452Z env:
+2026-04-21T20:14:03.2676761Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/e42a4099-4705-4f9c-a2fb-2171b3411925
+2026-04-21T20:14:03.2677144Z ##[endgroup]
+2026-04-21T20:14:06.1134936Z 
+2026-04-21T20:14:06.1135748Z Error: Operation failed
+2026-04-21T20:14:06.1154742Z 
+2026-04-21T20:14:06.1175267Z   on .terraform/modules/subnets/variables.tf line 520, in variable "public_subnets_per_az_count":
+2026-04-21T20:14:06.1176599Z  520:     condition     = var.public_subnets_per_az_count == null || var.public_subnets_per_az_count > 0
+2026-04-21T20:14:06.1199658Z     ├────────────────
+2026-04-21T20:14:06.1235332Z     │ var.public_subnets_per_az_count is null
+2026-04-21T20:14:06.1254819Z 
+2026-04-21T20:14:06.1275058Z Error during operation: argument must not be null.
+2026-04-21T20:14:06.1275929Z 
+2026-04-21T20:14:06.1294917Z Error: Operation failed
+2026-04-21T20:14:06.1314785Z 
+2026-04-21T20:14:06.1335175Z   on .terraform/modules/subnets/variables.tf line 546, in variable "private_subnets_per_az_count":
+2026-04-21T20:14:06.1336487Z  546:     condition     = var.private_subnets_per_az_count == null || var.private_subnets_per_az_count > 0
+2026-04-21T20:14:06.1355058Z     ├────────────────
+2026-04-21T20:14:06.1369571Z     │ var.private_subnets_per_az_count is null
+2026-04-21T20:14:06.1370139Z 
+2026-04-21T20:14:06.1370531Z Error during operation: argument must not be null.
+2026-04-21T20:14:06.1469792Z ##[error]Terraform exited with code 1.
+2026-04-21T20:14:06.1505283Z ##[error]Process completed with exit code 1.
+2026-04-21T20:14:06.1623277Z ##[group]Run actions/github-script@v7
+2026-04-21T20:14:06.1623538Z with:
+2026-04-21T20:14:06.1625304Z   script: const output = `#### Terraform Validation Results for \`01_network/dev\`
+
+| Check | Status |
+|-------|--------|
+| 🎨 Format | ✅ Pass |
+| 🔧 Init | ✅ Pass |
+| ✔️ Validate | ❌ Fail |
+
+<details><summary>Show Details</summary>
+
+\`\`\`
+Format: success
+Init: success
+Validate: failure
+\`\`\`
+
+</details>
+
+*Pusher: @lachoxsl, Action: \`pull_request\`*`;
+
+github.rest.issues.createComment({
+  issue_number: context.issue.number,
+  owner: context.repo.owner,
+  repo: context.repo.repo,
+  body: output
+});
+
+2026-04-21T20:14:06.1627258Z   github-token: ***
+2026-04-21T20:14:06.1627450Z   debug: false
+2026-04-21T20:14:06.1627641Z   user-agent: actions/github-script
+2026-04-21T20:14:06.1627888Z   result-encoding: json
+2026-04-21T20:14:06.1628072Z   retries: 0
+2026-04-21T20:14:06.1628275Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-04-21T20:14:06.1628529Z env:
+2026-04-21T20:14:06.1628848Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/e42a4099-4705-4f9c-a2fb-2171b3411925
+2026-04-21T20:14:06.1629208Z ##[endgroup]
+2026-04-21T20:14:07.0005167Z ##[group]Run echo "❌ Terraform validation failed for 01_network/dev"
+2026-04-21T20:14:07.0005693Z [36;1mecho "❌ Terraform validation failed for 01_network/dev"[0m
+2026-04-21T20:14:07.0006038Z [36;1mexit 1[0m
+2026-04-21T20:14:07.0026456Z shell: /usr/bin/bash -e {0}
+2026-04-21T20:14:07.0026671Z env:
+2026-04-21T20:14:07.0026985Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/e42a4099-4705-4f9c-a2fb-2171b3411925
+2026-04-21T20:14:07.0027367Z ##[endgroup]
+2026-04-21T20:14:07.0070997Z ❌ Terraform validation failed for 01_network/dev
+2026-04-21T20:14:07.0073882Z ##[error]Process completed with exit code 1.
+2026-04-21T20:14:07.0139798Z Post job cleanup.
+2026-04-21T20:14:07.1117957Z [command]/usr/bin/git version
+2026-04-21T20:14:07.1159848Z git version 2.53.0
+2026-04-21T20:14:07.1218005Z Temporarily overriding HOME='/home/runner/work/_temp/786f03e9-d34b-429a-b809-b214bc59e06f' before making global git config changes
+2026-04-21T20:14:07.1219633Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-21T20:14:07.1226963Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/infra/infra
+2026-04-21T20:14:07.1264748Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-21T20:14:07.1300037Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-21T20:14:07.1525869Z fatal: No url found for submodule path 'infra' in .gitmodules
+2026-04-21T20:14:07.1559519Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+2026-04-21T20:14:07.1654780Z Cleaning up orphan processes
+2026-04-21T20:14:07.1932955Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4, actions/github-script@v7, hashicorp/setup-terraform@v3. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

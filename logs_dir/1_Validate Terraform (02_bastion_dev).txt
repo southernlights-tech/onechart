@@ -1,0 +1,224 @@
+﻿2026-04-21T20:13:48.6383600Z Current runner version: '2.333.1'
+2026-04-21T20:13:48.6418405Z ##[group]Runner Image Provisioner
+2026-04-21T20:13:48.6419344Z Hosted Compute Agent
+2026-04-21T20:13:48.6419933Z Version: 20260213.493
+2026-04-21T20:13:48.6420568Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-04-21T20:13:48.6421338Z Build Date: 2026-02-13T00:28:41Z
+2026-04-21T20:13:48.6422064Z Worker ID: {f21d76ff-cec7-438d-9cf9-66ee20446f30}
+2026-04-21T20:13:48.6422838Z Azure Region: eastus
+2026-04-21T20:13:48.6423353Z ##[endgroup]
+2026-04-21T20:13:48.6424791Z ##[group]Operating System
+2026-04-21T20:13:48.6425365Z Ubuntu
+2026-04-21T20:13:48.6425849Z 24.04.4
+2026-04-21T20:13:48.6426378Z LTS
+2026-04-21T20:13:48.6427179Z ##[endgroup]
+2026-04-21T20:13:48.6427733Z ##[group]Runner Image
+2026-04-21T20:13:48.6428451Z Image: ubuntu-24.04
+2026-04-21T20:13:48.6429006Z Version: 20260413.86.1
+2026-04-21T20:13:48.6430280Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+2026-04-21T20:13:48.6431751Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+2026-04-21T20:13:48.6432693Z ##[endgroup]
+2026-04-21T20:13:48.6433891Z ##[group]GITHUB_TOKEN Permissions
+2026-04-21T20:13:48.6435950Z Contents: read
+2026-04-21T20:13:48.6436564Z Metadata: read
+2026-04-21T20:13:48.6437457Z PullRequests: write
+2026-04-21T20:13:48.6437973Z ##[endgroup]
+2026-04-21T20:13:48.6440186Z Secret source: Actions
+2026-04-21T20:13:48.6440922Z Prepare workflow directory
+2026-04-21T20:13:48.6905172Z Prepare all required actions
+2026-04-21T20:13:48.6959214Z Getting action download info
+2026-04-21T20:13:49.0272565Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-04-21T20:13:49.1758130Z Download action repository 'hashicorp/setup-terraform@v3' (SHA:b9cd54a3c349d3f38e8881555d616ced269862dd)
+2026-04-21T20:13:49.3915733Z Download action repository 'actions/github-script@v7' (SHA:f28e40c7f34bde8b3046d885e986cb6290c5673b)
+2026-04-21T20:13:49.6904792Z Complete job name: Validate Terraform (02_bastion/dev)
+2026-04-21T20:13:49.7611465Z ##[group]Run actions/checkout@v4
+2026-04-21T20:13:49.7612333Z with:
+2026-04-21T20:13:49.7612792Z   repository: southernlights-tech/infra
+2026-04-21T20:13:49.7613569Z   token: ***
+2026-04-21T20:13:49.7613998Z   ssh-strict: true
+2026-04-21T20:13:49.7614438Z   ssh-user: git
+2026-04-21T20:13:49.7614886Z   persist-credentials: true
+2026-04-21T20:13:49.7615386Z   clean: true
+2026-04-21T20:13:49.7615872Z   sparse-checkout-cone-mode: true
+2026-04-21T20:13:49.7616399Z   fetch-depth: 1
+2026-04-21T20:13:49.7617027Z   fetch-tags: false
+2026-04-21T20:13:49.7617499Z   show-progress: true
+2026-04-21T20:13:49.7617953Z   lfs: false
+2026-04-21T20:13:49.7618371Z   submodules: false
+2026-04-21T20:13:49.7618832Z   set-safe-directory: true
+2026-04-21T20:13:49.7619522Z ##[endgroup]
+2026-04-21T20:13:49.8790122Z Syncing repository: southernlights-tech/infra
+2026-04-21T20:13:49.8791954Z ##[group]Getting Git version info
+2026-04-21T20:13:49.8792709Z Working directory is '/home/runner/work/infra/infra'
+2026-04-21T20:13:49.8796066Z [command]/usr/bin/git version
+2026-04-21T20:13:49.8846976Z git version 2.53.0
+2026-04-21T20:13:49.8870235Z ##[endgroup]
+2026-04-21T20:13:49.8879685Z Temporarily overriding HOME='/home/runner/work/_temp/4f7fb6be-d387-4250-bc7a-5489f68634de' before making global git config changes
+2026-04-21T20:13:49.8883923Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-21T20:13:49.8887726Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/infra/infra
+2026-04-21T20:13:49.8924341Z Deleting the contents of '/home/runner/work/infra/infra'
+2026-04-21T20:13:49.8929805Z ##[group]Initializing the repository
+2026-04-21T20:13:49.8934539Z [command]/usr/bin/git init /home/runner/work/infra/infra
+2026-04-21T20:13:49.8998115Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-04-21T20:13:49.8999598Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-04-21T20:13:49.9001273Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-04-21T20:13:49.9002295Z hint: call:
+2026-04-21T20:13:49.9002938Z hint:
+2026-04-21T20:13:49.9003740Z hint: 	git config --global init.defaultBranch <name>
+2026-04-21T20:13:49.9004630Z hint:
+2026-04-21T20:13:49.9005538Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-04-21T20:13:49.9006501Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-04-21T20:13:49.9008008Z hint:
+2026-04-21T20:13:49.9008963Z hint: 	git branch -m <name>
+2026-04-21T20:13:49.9010042Z hint:
+2026-04-21T20:13:49.9011326Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-04-21T20:13:49.9013385Z Initialized empty Git repository in /home/runner/work/infra/infra/.git/
+2026-04-21T20:13:49.9021669Z [command]/usr/bin/git remote add origin https://github.com/southernlights-tech/infra
+2026-04-21T20:13:49.9055057Z ##[endgroup]
+2026-04-21T20:13:49.9056504Z ##[group]Disabling automatic garbage collection
+2026-04-21T20:13:49.9059852Z [command]/usr/bin/git config --local gc.auto 0
+2026-04-21T20:13:49.9092753Z ##[endgroup]
+2026-04-21T20:13:49.9094193Z ##[group]Setting up auth
+2026-04-21T20:13:49.9100789Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-21T20:13:49.9136053Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-21T20:13:49.9440913Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-04-21T20:13:49.9477618Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-04-21T20:13:49.9723086Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-04-21T20:13:49.9769817Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-04-21T20:13:50.0028584Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-04-21T20:13:50.0068608Z ##[endgroup]
+2026-04-21T20:13:50.0071728Z ##[group]Fetching the repository
+2026-04-21T20:13:50.0079518Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +47e011010d53fdae70a59a768e06c5b26ead0429:refs/remotes/pull/39/merge
+2026-04-21T20:13:50.2788930Z From https://github.com/southernlights-tech/infra
+2026-04-21T20:13:50.2790866Z  * [new ref]         47e011010d53fdae70a59a768e06c5b26ead0429 -> pull/39/merge
+2026-04-21T20:13:50.2793926Z ##[endgroup]
+2026-04-21T20:13:50.2795146Z ##[group]Determining the checkout info
+2026-04-21T20:13:50.2796531Z ##[endgroup]
+2026-04-21T20:13:50.2798190Z [command]/usr/bin/git sparse-checkout disable
+2026-04-21T20:13:50.2835446Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-04-21T20:13:50.2868252Z ##[group]Checking out the ref
+2026-04-21T20:13:50.2876989Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/39/merge
+2026-04-21T20:13:50.3023895Z Note: switching to 'refs/remotes/pull/39/merge'.
+2026-04-21T20:13:50.3025192Z 
+2026-04-21T20:13:50.3028377Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-04-21T20:13:50.3030147Z changes and commit them, and you can discard any commits you make in this
+2026-04-21T20:13:50.3031934Z state without impacting any branches by switching back to a branch.
+2026-04-21T20:13:50.3032901Z 
+2026-04-21T20:13:50.3033617Z If you want to create a new branch to retain commits you create, you may
+2026-04-21T20:13:50.3035188Z do so (now or later) by using -c with the switch command. Example:
+2026-04-21T20:13:50.3036278Z 
+2026-04-21T20:13:50.3037171Z   git switch -c <new-branch-name>
+2026-04-21T20:13:50.3038232Z 
+2026-04-21T20:13:50.3038780Z Or undo this operation with:
+2026-04-21T20:13:50.3039457Z 
+2026-04-21T20:13:50.3039929Z   git switch -
+2026-04-21T20:13:50.3040547Z 
+2026-04-21T20:13:50.3041369Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-04-21T20:13:50.3042443Z 
+2026-04-21T20:13:50.3043612Z HEAD is now at 47e0110 Merge 37bd0d0437d7b1a44c8f2caefd2af38bde07b396 into 31fd6eff935a01f06c9a81569b539e48e9e2ed9f
+2026-04-21T20:13:50.3047892Z ##[endgroup]
+2026-04-21T20:13:50.3078789Z [command]/usr/bin/git log -1 --format=%H
+2026-04-21T20:13:50.3101628Z 47e011010d53fdae70a59a768e06c5b26ead0429
+2026-04-21T20:13:50.3351744Z ##[group]Run hashicorp/setup-terraform@v3
+2026-04-21T20:13:50.3352597Z with:
+2026-04-21T20:13:50.3353248Z   terraform_version: ~1.9
+2026-04-21T20:13:50.3354051Z   cli_config_credentials_hostname: app.terraform.io
+2026-04-21T20:13:50.3354909Z   terraform_wrapper: true
+2026-04-21T20:13:50.3355626Z ##[endgroup]
+2026-04-21T20:13:50.9473770Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/6787d442-8938-48e4-9eb1-f196aca65da3
+2026-04-21T20:13:51.6962994Z ##[group]Run terraform fmt -check -recursive
+2026-04-21T20:13:51.6964179Z [36;1mterraform fmt -check -recursive[0m
+2026-04-21T20:13:51.6994998Z shell: /usr/bin/bash -e {0}
+2026-04-21T20:13:51.6995739Z env:
+2026-04-21T20:13:51.6997039Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/64d9cafc-b9fd-42f2-b3f4-5a1b8c84447e
+2026-04-21T20:13:51.6998577Z ##[endgroup]
+2026-04-21T20:13:52.5919927Z ##[group]Run terraform init -backend=false
+2026-04-21T20:13:52.5920492Z [36;1mterraform init -backend=false[0m
+2026-04-21T20:13:52.5951591Z shell: /usr/bin/bash -e {0}
+2026-04-21T20:13:52.5951983Z env:
+2026-04-21T20:13:52.5952538Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/64d9cafc-b9fd-42f2-b3f4-5a1b8c84447e
+2026-04-21T20:13:52.5953175Z ##[endgroup]
+2026-04-21T20:13:52.7064168Z [0m[1mInitializing modules...[0m
+2026-04-21T20:13:52.7075193Z Downloading git::https://github.com/southernlights-tech/terraform-modules-s3?ref=v0.1.0 for bastion-s3-bucket...
+2026-04-21T20:13:52.9040126Z - bastion-s3-bucket in .terraform/modules/bastion-s3-bucket
+2026-04-21T20:13:52.9046752Z Downloading git::https://github.com/southernlights-tech/terraform-modules-iam-role?ref=v0.1.0 for bastion_iam_role...
+2026-04-21T20:13:53.0968621Z - bastion_iam_role in .terraform/modules/bastion_iam_role
+2026-04-21T20:13:53.0988784Z [0m[1mInitializing provider plugins...[0m
+2026-04-21T20:13:53.0994609Z - terraform.io/builtin/terraform is built in to Terraform
+2026-04-21T20:13:53.0996099Z - Reusing previous version of hashicorp/aws from the dependency lock file
+2026-04-21T20:13:53.1565608Z - Reusing previous version of poseidon/ct from the dependency lock file
+2026-04-21T20:13:53.2509924Z - Installing hashicorp/aws v5.77.0...
+2026-04-21T20:14:01.0902916Z - Installed hashicorp/aws v5.77.0 (signed by HashiCorp)
+2026-04-21T20:14:01.3092325Z - Installing poseidon/ct v0.13.0...
+2026-04-21T20:14:01.8792786Z - Installed poseidon/ct v0.13.0 (self-signed, key ID [0m[1m8F515AD1602065C8[0m[0m)
+2026-04-21T20:14:01.8798274Z Partner and community providers are signed by their developers.
+2026-04-21T20:14:01.8799270Z If you'd like to know more about provider signing, you can read about it here:
+2026-04-21T20:14:01.8800198Z https://www.terraform.io/docs/cli/plugins/signing.html
+2026-04-21T20:14:01.8800695Z 
+2026-04-21T20:14:01.8801375Z [0m[1m[32mTerraform has been successfully initialized![0m[32m[0m
+2026-04-21T20:14:01.8802159Z [0m[32m
+2026-04-21T20:14:01.8802858Z You may now begin working with Terraform. Try running "terraform plan" to see
+2026-04-21T20:14:01.8819318Z any changes that are required for your infrastructure. All Terraform commands
+2026-04-21T20:14:01.8837465Z should now work.
+2026-04-21T20:14:01.8857338Z 
+2026-04-21T20:14:01.8867823Z If you ever set or change modules or backend configuration for Terraform,
+2026-04-21T20:14:01.8872256Z rerun this command to reinitialize your working directory. If you forget, other
+2026-04-21T20:14:01.8873941Z commands will detect it and remind you to do so if necessary.[0m
+2026-04-21T20:14:01.8940531Z ##[group]Run terraform validate -no-color
+2026-04-21T20:14:01.8940858Z [36;1mterraform validate -no-color[0m
+2026-04-21T20:14:01.8963449Z shell: /usr/bin/bash -e {0}
+2026-04-21T20:14:01.8963697Z env:
+2026-04-21T20:14:01.8964034Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/64d9cafc-b9fd-42f2-b3f4-5a1b8c84447e
+2026-04-21T20:14:01.8964420Z ##[endgroup]
+2026-04-21T20:14:04.5307468Z Success! The configuration is valid.
+2026-04-21T20:14:04.5308250Z 
+2026-04-21T20:14:04.5523181Z ##[group]Run actions/github-script@v7
+2026-04-21T20:14:04.5523448Z with:
+2026-04-21T20:14:04.5525001Z   script: const output = `#### Terraform Validation Results for \`02_bastion/dev\`
+
+| Check | Status |
+|-------|--------|
+| 🎨 Format | ✅ Pass |
+| 🔧 Init | ✅ Pass |
+| ✔️ Validate | ✅ Pass |
+
+<details><summary>Show Details</summary>
+
+\`\`\`
+Format: success
+Init: success
+Validate: success
+\`\`\`
+
+</details>
+
+*Pusher: @lachoxsl, Action: \`pull_request\`*`;
+
+github.rest.issues.createComment({
+  issue_number: context.issue.number,
+  owner: context.repo.owner,
+  repo: context.repo.repo,
+  body: output
+});
+
+2026-04-21T20:14:04.5526731Z   github-token: ***
+2026-04-21T20:14:04.5527210Z   debug: false
+2026-04-21T20:14:04.5527429Z   user-agent: actions/github-script
+2026-04-21T20:14:04.5527691Z   result-encoding: json
+2026-04-21T20:14:04.5527896Z   retries: 0
+2026-04-21T20:14:04.5528117Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-04-21T20:14:04.5528382Z env:
+2026-04-21T20:14:04.5528722Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/64d9cafc-b9fd-42f2-b3f4-5a1b8c84447e
+2026-04-21T20:14:04.5529105Z ##[endgroup]
+2026-04-21T20:14:05.3926272Z Post job cleanup.
+2026-04-21T20:14:05.4904174Z [command]/usr/bin/git version
+2026-04-21T20:14:05.4946292Z git version 2.53.0
+2026-04-21T20:14:05.5008285Z Temporarily overriding HOME='/home/runner/work/_temp/5e160bcd-f071-4bf1-9d6e-e35946b8c2bd' before making global git config changes
+2026-04-21T20:14:05.5009896Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-21T20:14:05.5017720Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/infra/infra
+2026-04-21T20:14:05.5058360Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-21T20:14:05.5100142Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-21T20:14:05.5355077Z fatal: No url found for submodule path 'infra' in .gitmodules
+2026-04-21T20:14:05.5419195Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+2026-04-21T20:14:05.5558005Z Cleaning up orphan processes
+2026-04-21T20:14:05.5874033Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4, actions/github-script@v7, hashicorp/setup-terraform@v3. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

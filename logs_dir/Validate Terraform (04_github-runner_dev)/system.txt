@@ -1,0 +1,9 @@
+2026-04-21T20:13:45.0060000Z Requested labels: ubuntu-latest
+2026-04-21T20:13:45.0060000Z Job defined at: southernlights-tech/infra/.github/workflows/terraform-ci.yml@refs/pull/39/merge
+2026-04-21T20:13:45.0060000Z Waiting for a runner to pick up this job...
+2026-04-21T20:13:44.9990000Z Evaluating terraform-validate.if
+2026-04-21T20:13:44.9990000Z Evaluating: (success() && ((needs.detect-changes.outputs.directories != '[]')))
+2026-04-21T20:13:44.9990000Z Expanded: (true && ('["00_init","01_network/dev","02_bastion/dev","03_ecr/dev","04_github-runner/dev","05_dns/dev","06_ssl/dev","07_k3s/dev","08_kms/dev","09_vpn/dev","modules/aws-client-vpn"]' != '[]'))
+2026-04-21T20:13:44.9990000Z Result: true
+2026-04-21T20:13:45.1870000Z Job is about to start running on the hosted runner: GitHub Actions 1000000474
+2026-04-21T20:13:45.1870000Z Job is waiting for a hosted runner to come online.
