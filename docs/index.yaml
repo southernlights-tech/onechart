@@ -53,7 +53,7 @@ entries:
     type: application
     urls:
     - https://southernlights-tech.github.io/onechart/onechart-0.77.1.tgz
-    version: 0.77.0
+    version: 0.77.1
   - apiVersion: v2
     created: "2026-04-15T15:16:04.038204212-03:00"
     dependencies:

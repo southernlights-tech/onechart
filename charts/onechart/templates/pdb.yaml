@@ -1,4 +1,4 @@
-{{- if and (.Values.podDisruptionBudgetEnabled) (or (gt (.Values.replicas | int64) 1) (and (.Values.autoscaling.enabled) (gt (.Values.autoscaling.minReplicas | int64) 1))) }}
+{{- if and (.Values.podDisruptionBudgetEnabled) (or (gt (.Values.replicas | int64) 1) (and (or (hasKey .Values.autoscaling "cpuAverageUtilization") (hasKey .Values.autoscaling "memoryAverageUtilization")) (gt (.Values.autoscaling.minReplicas | int64) 1))) }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:

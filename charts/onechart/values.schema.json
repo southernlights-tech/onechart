@@ -1332,7 +1332,7 @@
       "$id": "#/properties/releaseNameOverride",
       "type": "string",
       "title": "The releaseNameOverride schema",
-      "description": "An explanation about the purpose of this instance.",
+      "description": "Override the Helm release name used in resource naming",
       "default": "",
       "examples": [
         ""

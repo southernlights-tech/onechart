@@ -50,3 +50,18 @@ tests:
     asserts:
       - hasDocuments:
           count: 0
+
+  - it: should render pdb when HPA is enabled with minReplicas > 1
+    set:
+      podDisruptionBudgetEnabled: true
+      replicas: 1
+      autoscaling:
+        cpuAverageUtilization: 80
+        minReplicas: 3
+        maxReplicas: 10
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget
+      - equal:
+          path: spec.maxUnavailable
+          value: 50%
