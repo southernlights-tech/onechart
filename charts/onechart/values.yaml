@@ -10,7 +10,7 @@ image:
 #   annotations:
 #     cert-manager.io/cluster-issuer: letsencrypt-staging
 #   nginxBasicAuth:
-#     user: admin
+#     user: authorized-user
 #     password: secret
 
 # vars:
@@ -79,6 +79,8 @@ secretEnabled: false
 shell: "/bin/sh"
 
 podDisruptionBudgetEnabled: true
+# podDisruptionBudgetMinAvailable: 1
+# podDisruptionBudgetMaxUnavailable: 1
 spreadAcrossNodes: false
 
 nodePortEnabled: false

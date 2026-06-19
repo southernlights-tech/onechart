@@ -1,12 +1,26 @@
-{{- if and (.Values.podDisruptionBudgetEnabled) (gt (.Values.replicas | int64) 1) }}
+{{- $hpaEnabled := false -}}
+{{- if .Values.autoscaling -}}
+  {{- $hpaEnabled = or (hasKey .Values.autoscaling "cpuAverageUtilization") (hasKey .Values.autoscaling "memoryAverageUtilization") -}}
+{{- end -}}
+{{- $minReplicas := .Values.replicas | int64 -}}
+{{- if and $hpaEnabled .Values.autoscaling.minReplicas -}}
+  {{- $minReplicas = .Values.autoscaling.minReplicas | int64 -}}
+{{- end -}}
+{{- if and (.Values.podDisruptionBudgetEnabled) (gt $minReplicas 1) }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "robustName" .Release.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
+  {{- if .Values.podDisruptionBudgetMinAvailable }}
+  minAvailable: {{ .Values.podDisruptionBudgetMinAvailable }}
+  {{- else if .Values.podDisruptionBudgetMaxUnavailable }}
+  maxUnavailable: {{ .Values.podDisruptionBudgetMaxUnavailable }}
+  {{- else }}
   minAvailable: 1
+  {{- end }}
   selector:
     matchLabels:
       {{- include "helm-chart.selectorLabels" . | nindent 6 }}
-  {{- end }}
+{{- end }}
