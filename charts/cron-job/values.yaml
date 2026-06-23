@@ -13,17 +13,9 @@ fullnameOverride: ""
 
 podAnnotations: {}
 
-podSecurityContext:
-  fsGroup: 999
-  runAsNonRoot: true
-  runAsUser: 999
+podSecurityContext: {}
 
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - ALL
-  readOnlyRootFilesystem: true
+securityContext: {}
 
 resources: {}
 

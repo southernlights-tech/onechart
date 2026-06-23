@@ -10,7 +10,7 @@ image:
 #   annotations:
 #     cert-manager.io/cluster-issuer: letsencrypt-staging
 #   nginxBasicAuth:
-#     user: authorized-user
+#     user: southernlights
 #     password: secret
 
 # vars:
@@ -33,19 +33,11 @@ podAnnotations: {}
 
 podLabels: {}
 
-podSecurityContext:
-  fsGroup: 999
-  runAsNonRoot: true
-  runAsUser: 999
+podSecurityContext: { fsGroup: 999 }
 
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - ALL
-  readOnlyRootFilesystem: true
+securityContext: {}
 
-containerPort: 8080
+containerPort: 80
 
 resources:
   requests:

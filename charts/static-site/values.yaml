@@ -15,21 +15,13 @@ fullnameOverride: ""
 
 podAnnotations: {}
 
-podSecurityContext:
-  fsGroup: 999
-  runAsNonRoot: true
-  runAsUser: 999
+podSecurityContext: {}
 
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - ALL
-  readOnlyRootFilesystem: true
+securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
 
 # ingress:
 #   host: dummyapp.127.0.0.1.nip.io

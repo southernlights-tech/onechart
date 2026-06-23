@@ -7,7 +7,7 @@ tests:
       ingress:
         host: chart-example.local
         nginxBasicAuth:
-          user: authorized-user
+          user: southernlights
           password: secret1
     asserts:
       - equal:

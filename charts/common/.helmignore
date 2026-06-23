@@ -10,4 +10,5 @@ scripts/
 charts/*/tests/
 .DS_Store
 *.swp
+*~
 test-fixture-service-account.json

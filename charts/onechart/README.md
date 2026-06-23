@@ -47,42 +47,6 @@ OneChart implements "Smart PDB" logic to prevent misconfigurations that could bl
 2. **HPA Awareness**: If Horizontal Pod Autoscaling (HPA) is enabled, the logic uses `autoscaling.minReplicas` to determine the minimum number of pods. If HPA is not enabled, it uses the static `replicas` value.
 3. **Default Safety**: If PDB is enabled (`podDisruptionBudgetEnabled: true`) but neither `podDisruptionBudgetMinAvailable` nor `podDisruptionBudgetMaxUnavailable` is specified, it defaults to `minAvailable: 1`.
 
-## Security & Hardening
-
-OneChart is designed with security-first principles to ensure your applications run in a hardened environment by default.
-
-### Default Security Context
-By default, OneChart applies a restrictive `securityContext` to all pods:
-- **`runAsNonRoot: true`**: The container is required to run as a non-root user. If the container image attempts to run as root, Kubernetes will fail to start it.
-- **`readOnlyRootFilesystem: true`**: The container's root filesystem is mounted as read-only. This prevents attackers from modifying the application binaries or installing malicious tools if the container is compromised.
-
-### Handling Write Requirements
-If your application needs to write to specific directories (e.g., `/tmp`, `/app/cache`, or `/var/log`), the recommended approach is to mount an `emptyDir` volume at those locations. This maintains the security of the root filesystem while providing the necessary write access.
-
-Example `values.yaml` configuration:
-```yaml
-volumes:
-  - name: cache-volume
-    mountPath: /app/cache
-    emptyDir: {}
-  - name: tmp-volume
-    mountPath: /tmp
-    emptyDir: {}
-```
-
-### Legacy Exceptions
-While not recommended, some legacy applications may strictly require root access or a writable root filesystem. You can override the default security settings in your `values.yaml`:
-
-```yaml
-podSecurityContext:
-  runAsNonRoot: false
-  # You may also need to specify the user/group IDs
-  # runAsUser: 0
-  # runAsGroup: 0
-securityContext:
-  readOnlyRootFilesystem: false
-```
-
 ## Configuration Reference
 
 The following table lists the most commonly used configuration parameters.
@@ -108,7 +72,7 @@ image:
   repository: nginx
   tag: 1.21.0
 replicas: 3
-containerPort: 8080
+containerPort: 80
 ```
 
 ### Ingress with Basic Auth
@@ -118,7 +82,7 @@ ingress:
   ingressClassName: nginx
   tlsEnabled: true
   nginxBasicAuth:
-    user: authorized-user
+    user: southernlights
     password: changeme
 ```
 
