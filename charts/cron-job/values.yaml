@@ -13,8 +13,7 @@ fullnameOverride: ""
 
 podAnnotations: {}
 
-podSecurityContext:
-  fsGroup: 999
+podSecurityContext: {}
 
 securityContext: {}
 

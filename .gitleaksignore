@@ -1,0 +1,4 @@
+[allowlist]
+    paths = [
+        "charts/onechart/README.md"
+    ]

@@ -1,0 +1,9 @@
+# Ignore old versions in docs
+docs/*
+
+# Ignore False Positives in tests
+charts/onechart/tests/ingress_basic_auth_ing_test.yaml
+
+# Ignore security hardening findings (we treat these as recommendations for the user)
+KSV-0014
+KSV-0118

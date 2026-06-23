@@ -7,7 +7,7 @@ tests:
       ingress:
         host: chart-example.local
         nginxBasicAuth:
-          user: admin1
+          user: southernlights
           password: secret1
     asserts:
       - equal:
@@ -15,7 +15,7 @@ tests:
           value:
             konghq.com/plugins: release-name-file-log
             nginx.ingress.kubernetes.io/auth-type: basic
-            nginx.ingress.kubernetes.io/auth-secret: release-name-basic-auth
+            nginx.ingress.kubernetes.io/auth-secret: release-name-basic-auth # checkov:skip=CKV_SECRET_6: This is a test fixture name, not a secret
             nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - basic'
       - hasDocuments:
           count: 1
