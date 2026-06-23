@@ -29,7 +29,7 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 # ingress:
 #   host: dummyapp.127.0.0.1.nip.io

@@ -96,7 +96,6 @@ The following table lists the most commonly used configuration parameters.
 | `resources` | Pod resource requests and limits | `cpu: 200m, mem: 200Mi` |
 | `ingress.host` | Ingress hostname | `nil` |
 | `ingress.tlsEnabled` | Enable TLS for ingress | `false` |
-| `autoscaling.enabled` | Enable Horizontal Pod Autoscaler | `false` |
 | `podDisruptionBudgetEnabled` | Enable Smart PDB logic | `true` |
 | `volumes` | List of volumes and mounts (supports PVC) | `[]` |
 | `monitor.enabled` | Enable Prometheus ServiceMonitor | `false` |
@@ -127,7 +126,6 @@ ingress:
 ```yaml
 replicas: 2
 autoscaling:
-  enabled: true
   minReplicas: 3
   maxReplicas: 10
   cpuAverageUtilization: 80
