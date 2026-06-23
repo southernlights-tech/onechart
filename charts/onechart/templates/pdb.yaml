@@ -13,9 +13,9 @@ metadata:
   name: {{ template "robustName" .Release.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  {{- if .Values.podDisruptionBudgetMinAvailable }}
+  {{- if hasKey .Values "podDisruptionBudgetMinAvailable" }}
   minAvailable: {{ .Values.podDisruptionBudgetMinAvailable }}
-  {{- else if .Values.podDisruptionBudgetMaxUnavailable }}
+  {{- else if hasKey .Values "podDisruptionBudgetMaxUnavailable" }}
   maxUnavailable: {{ .Values.podDisruptionBudgetMaxUnavailable }}
   {{- else }}
   minAvailable: 1

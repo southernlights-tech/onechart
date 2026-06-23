@@ -8,3 +8,6 @@ scripts/
 *.sh
 *.tgz
 charts/*/tests/
+.DS_Store
+*.swp
+test-fixture-service-account.json

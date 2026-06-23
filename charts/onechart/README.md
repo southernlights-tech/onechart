@@ -74,12 +74,13 @@ volumes:
 While not recommended, some legacy applications may strictly require root access or a writable root filesystem. You can override the default security settings in your `values.yaml`:
 
 ```yaml
-securityContext:
+podSecurityContext:
   runAsNonRoot: false
-  readOnlyRootFilesystem: false
   # You may also need to specify the user/group IDs
   # runAsUser: 0
   # runAsGroup: 0
+securityContext:
+  readOnlyRootFilesystem: false
 ```
 
 ## Configuration Reference
@@ -108,6 +109,7 @@ image:
   repository: nginx
   tag: 1.21.0
 replicas: 3
+containerPort: 8080
 ```
 
 ### Ingress with Basic Auth
