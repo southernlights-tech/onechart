@@ -35,8 +35,15 @@ podLabels: {}
 
 podSecurityContext:
   fsGroup: 999
+  runAsNonRoot: true
+  runAsUser: 999
 
-securityContext: {}
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
 
 containerPort: 80
 
