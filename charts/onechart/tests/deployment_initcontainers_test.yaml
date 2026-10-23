@@ -3,7 +3,7 @@ templates:
   - deployment.yaml
   - configmap.yaml
 tests:
-  - it: Should set name, image and tag  
+  - it: Should set name, image and tag
     set:
       initContainers:
         - name: pod1
@@ -20,7 +20,7 @@ tests:
         equal:
           path: spec.template.spec.initContainers[0].image
           value: "nginx:1.2.2"
-  - it: Should set command  
+  - it: Should set command
     set:
       initContainers:
         - name: pod1

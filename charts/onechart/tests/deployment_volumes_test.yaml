@@ -235,7 +235,7 @@ tests:
   - it: Should mount a volume only for the init container
     set:
       initContainers:
-        - name : pod
+        - name: pod
           image: debian
           tag: v1.0.0
       volumes:
@@ -249,14 +249,14 @@ tests:
           path: spec.template.spec.volumes
           value:
           - name: init-volume
-            emptyDir: {} 
+            emptyDir: {}
       - template: deployment.yaml
         documentIndex: 0
         equal:
           path: spec.template.spec.initContainers[0].volumeMounts
           value:
           - name: init-volume
-            mountPath: /data 
+            mountPath: /data
       - template: deployment.yaml
         documentIndex: 0
         notEqual:
@@ -267,7 +267,7 @@ tests:
   - it: Should mount a shared volume between the main container and the init container
     set:
       initContainers:
-        - name : pod
+        - name: pod
           image: debian
           tag: v1.0.0
       volumes:
@@ -288,7 +288,7 @@ tests:
           path: spec.template.spec.containers[0].volumeMounts
           value:
           - name: shared-volume
-            mountPath: /data      
+            mountPath: /data
   - it: Should not create PVC when using existing secret
     set:
       volumes:

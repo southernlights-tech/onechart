@@ -1,0 +1,16 @@
+---
+extends: default
+
+# charts/*/templates/ contains Helm Go templates ({{ ... }}), not valid YAML.
+# Linting them as YAML produces false positives (syntax/braces). Rendered
+# manifests are validated with `helm lint` / `helm unittest` (see Makefile).
+# NOTE: the gate passes ABSOLUTE paths, so the ignore glob must be absolute-safe.
+ignore: |
+  **/charts/*/templates/**
+  charts/*/templates/
+
+rules:
+  line-length: disable
+  comments-indentation: disable
+  indentation: disable
+  document-start: disable

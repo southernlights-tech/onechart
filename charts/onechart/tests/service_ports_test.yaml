@@ -67,7 +67,7 @@ tests:
   - it: Should set default protocol to TCP
     set:
       ports:
-        - containerPort: 8080
+        - containerPort: 80
           svcPort: 80
           name: default
     asserts:
