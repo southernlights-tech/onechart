@@ -1,14 +1,21 @@
 # Patterns to ignore when packaging the chart
 .git/
 .github/
+.gitignore
 .vscode/
 .idea/
+.svn/
+.hg/
+.bzr/
 tests/
 scripts/
 *.sh
 *.tgz
-charts/*/tests/
-.DS_Store
+*.bak
+*.tmp
+*.orig
 *.swp
 *~
+.DS_Store
+charts/*/tests/
 test-fixture-service-account.json
