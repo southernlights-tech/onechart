@@ -10,7 +10,6 @@
 tests/
 scripts/
 *.sh
-*.tgz
 *.bak
 *.tmp
 *.orig
