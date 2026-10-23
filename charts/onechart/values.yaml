@@ -33,7 +33,7 @@ podAnnotations: {}
 
 podLabels: {}
 
-podSecurityContext: { fsGroup: 999 }
+podSecurityContext: {fsGroup: 999}
 
 securityContext: {}
 
@@ -155,7 +155,7 @@ kong:
     #       headers:
     #         - "access-control-allow-origin:https://example.com"
     #         - "access-control-allow-credentials:true"
-    
+
     # Example rate limiting plugin
     # rate-limit:
     #   enabled: false
@@ -164,7 +164,7 @@ kong:
     #     minute: 100
     #     hour: 1000
     #     policy: local
-    
+
     # Example request transformer plugin
     # request-transformer:
     #   enabled: false

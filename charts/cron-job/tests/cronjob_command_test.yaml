@@ -21,4 +21,4 @@ tests:
         documentIndex: 0
         equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].command
-          value: ['/bin/ash', '-c','while true; do date; sleep 2; done']
+          value: ['/bin/ash', '-c', 'while true; do date; sleep 2; done']
